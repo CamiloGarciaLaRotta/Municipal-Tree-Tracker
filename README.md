@@ -8,8 +8,8 @@ Persistence is achieved trhough **[CHOOSE DB]** and the [records](https://github
 
 Clone the repo
 ```bash
-git clone https://github.com/CamiloGarciaLaRotta/TR.square-API.git
-cd TR.square-API
+git clone https://github.com/CamiloGarciaLaRotta/TR-API.git
+cd TR-API
 ```
 
 Create a virtual environment and activate it
