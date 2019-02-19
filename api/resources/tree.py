@@ -1,23 +1,22 @@
-from flask import Flask
-from flask_restplus import Api, Resource, fields
+from flask_restplus import Resource
 
-from environment.instance import environment_config
 from server.instance import server
 from models.tree import tree
 
+# Dummy example to ensure connectivity
 import records
-
-app, api = server.app, server.api
-
+from environment.instance import environment_config
 db_user     = environment_config['db_user']
 db_pass     = environment_config['db_pass']
 db_server   = environment_config['db_server']
 db_name     = environment_config['db_name']
 
 db = records.Database(f'postgres://{db_user}:{db_pass}@{db_server}/{db_name}')
-# Dummy example to ensure connectivity
 rows = db.query('select * from city')
 print(rows[0])
+##################################
+
+api = server.api
 
 trees_db = [
     {"id": 0, "species": "Acacia penninervis", "planted_on":"2014-02-15"},
@@ -79,4 +78,3 @@ class Tree(Resource):
             match.update(api.payload)
             match["id"] = id
         return match
-
