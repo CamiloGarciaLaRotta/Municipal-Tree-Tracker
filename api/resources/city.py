@@ -27,7 +27,7 @@ class CityList(Resource):
         pass
 
 @city_ns.route('/<string:c_name>')
-class Tree(Resource):
+class City(Resource):
     @api.marshal_with(city)
     def get(self, c_name):
         """

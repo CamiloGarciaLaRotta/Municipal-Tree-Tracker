@@ -5,7 +5,7 @@ from models.civic_location import civic_loc
 
 api = server.api
 
-civic_ns = api.namespace('civic location', description='civic location related endpoints')
+civic_ns = api.namespace('civic_loc', description='civic location related endpoints')
 
 @civic_ns.route('')
 class CivicList(Resource):
