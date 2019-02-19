@@ -1,12 +1,24 @@
 from flask import Flask
 from flask_restplus import Api, Resource, fields
 
+from environment.instance import environment_config
 from server.instance import server
 from models.tree import tree
 
+import records
+
 app, api = server.app, server.api
 
-# TODO replace with actual DB + records library
+db_user     = environment_config['db_user']
+db_pass     = environment_config['db_pass']
+db_server   = environment_config['db_server']
+db_name     = environment_config['db_name']
+
+db = records.Database(f'postgres://{db_user}:{db_pass}@{db_server}/{db_name}')
+# Dummy example to ensure connectivity
+rows = db.query('select * from city')
+print(rows[0])
+
 trees_db = [
     {"id": 0, "species": "Acacia penninervis", "planted_on":"2014-02-15"},
     {"id": 1, "species": "Prunus dulcis", "planted_on":"2014-12-01"},
