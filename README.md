@@ -27,8 +27,10 @@ pip install -r requirements.txt
 
 # Run locally
 
+If you are not in the McGill campus, don't forget to connect to the [VPN](http://kb.mcgill.ca/kb/?ArticleId=1212&source=article&c=12&cid=2#tab:homeTab:crumb:8:artId:1212:src:article).
+
+Set your ENV variables and run the API server
 ```bash
-# set your ENV variables
 export DB_USERNAME=<username> && export DB_PASSWORD=<password>
 python api/main.py
 ```
