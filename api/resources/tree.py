@@ -1,80 +1,49 @@
 from flask_restplus import Resource
 
-from server.instance import server
+from server.instance import server, db
 from models.tree import tree
-
-# Dummy example to ensure connectivity
-import records
-from environment.instance import environment_config
-db_user     = environment_config['db_user']
-db_pass     = environment_config['db_pass']
-db_server   = environment_config['db_server']
-db_name     = environment_config['db_name']
-
-db = records.Database(f'postgres://{db_user}:{db_pass}@{db_server}/{db_name}')
-rows = db.query('select * from city')
-print(rows[0])
-##################################
+from .dao import get_all, get_by_id, create_single, delete_by_id
 
 api = server.api
 
-trees_db = [
-    {"id": 0, "species": "Acacia penninervis", "planted_on":"2014-02-15"},
-    {"id": 1, "species": "Prunus dulcis", "planted_on":"2014-12-01"},
-]
-
 tree_ns = api.namespace('trees', description='tree related endpoints')
+
 
 @tree_ns.route('')
 class TreeList(Resource):
     @api.marshal_list_with(tree)
     def get(self):
-        """
-        Retrieve all trees
-        """
-        return trees_db
+        """Retrieve all trees."""
+        return get_all('tree', db)
 
     @api.expect(tree, validate=True)
     @api.marshal_with(tree)
+    @api.response(404, 'Not Found')
     def post(self):
-        """
-        Create a new tree
-        """
-        api.payload["id"] = trees_db[-1]["id"] + 1 if len(trees_db) > 0 else 0
-        trees_db.append(api.payload)
-        return api.payload
+        """Create a new tree."""
+        # TODO how to handle optional values
+        attrs = ['species', 'planted_date', 'geog_loc']
+        vals = list(map(lambda attr: api.payload[attr], attrs))
+        record = create_single(vals, attrs, 'tid', 'tree', db)
+        return record if record else ('Failed to insert', 404)
 
-@tree_ns.route('/<int:id>')
+
+@tree_ns.route('/<int:tid>')
 class Tree(Resource):
-    def find_one(self, id):
-        return next((b for b in trees_db if b["id"] == id), None)
-
     @api.marshal_with(tree)
-    def get(self, id):
-        """
-        Retrieve a specific tree
-        """
-        match = self.find_one(id)
-        return match if match else ("Not found", 404)
+    @api.response(404, 'Not Found')
+    def get(self, tid):
+        """Retrieve a specific tree."""
+        record = get_by_id(tid, 'tid', 'tree', db)
+        return record if record else ('Not Found', 404)
 
-    @api.marshal_with(tree)
-    def delete(self, id):
-        """
-        Delete a specific tree
-        """
-        global trees_db
-        match = self.find_one(id)
-        trees_db = list(filter(lambda b: b["id"] != id, trees_db))
-        return match
+    def delete(self, tid):
+        """Delete a specific tree."""
+        delete_by_id(tid, 'tid', 'tree', db)
 
     @api.expect(tree, validate=True)
     @api.marshal_with(tree)
-    def put(self, id):
-        """
-        Update a specific tree
-        """
-        match = self.find_one(id)
-        if match != None:
-            match.update(api.payload)
-            match["id"] = id
-        return match
+    def put(self, tid):
+        """Update a specific tree."""
+        # TODO
+        pass
