@@ -2,9 +2,48 @@
 
 This is a simple Python API boilderplate
 using [Flask](http://flask.pocoo.org/) and [Flask-RESTPlus](https://flask-restplus.readthedocs.io/en/stable/).  
-Persistence is achieved trhough Postgres and the [records](https://github.com/kennethreitz/records) library.
+Persistence is achieved through Postgres and the [records](https://github.com/kennethreitz/records) library.
 
-# Set Up
+
+# How to run locally
+
+## Prerequisites
+ - If you are not in the McGill campus, don't forget to connect to the [VPN](http://kb.mcgill.ca/kb/?ArticleId=1212&source=article&c=12&cid=2#tab:homeTab:crumb:8:artId:1212:src:article)
+ - Create a `.env` file in the base directory of the repo with the following:
+    ```bash
+    DB_USERNAME=<your_username>
+    DB_PASSWORD=<your_password>
+    ```
+
+## Through Docker
+
+Build the Docker image from the base directory
+
+```bash
+docker build --rm -f "Dockerfile" -t tr-api:latest .
+```
+
+Run the container and map its localhost with your localhost
+```bash
+docker run \
+  --rm \
+  -p 127.0.0.1:8080:8080\
+  --env-file=.env \
+  -it \
+  tr-api:latest
+```
+
+## Directly on your machine
+
+Set your ENV variables and run the API server
+```bash
+source .env
+python api/main.py
+```
+
+Visit the API on [http://localhost:8080/api/swagger](http://localhost:5000/api/swagger).
+
+# How to contribute
 
 Clone the repo
 ```bash
@@ -24,17 +63,3 @@ Install the dependencies
 ```bash
 pip install -r requirements.txt
 ```
-
-# Run locally
-
-If you are not in the McGill campus, don't forget to connect to the [VPN](http://kb.mcgill.ca/kb/?ArticleId=1212&source=article&c=12&cid=2#tab:homeTab:crumb:8:artId:1212:src:article).
-
-Set your ENV variables and run the API server
-```bash
-export DB_USERNAME=<username> && export DB_PASSWORD=<password>
-python api/main.py
-```
-
-Visit the API on [http://localhost:8080/api/swagger](http://localhost:5000/api/swagger).
-
-
