@@ -7,15 +7,24 @@ Persistence is achieved through Postgres and the [records](https://github.com/ke
 
 # How to run locally
 
-## Prerequisites
+Once deployed locally, you can visit the on [http://localhost:8080/api/swagger](http://localhost:5000/api/swagger).
+
+### Prerequisites
  - If you are not in the McGill campus, don't forget to connect to the [VPN](http://kb.mcgill.ca/kb/?ArticleId=1212&source=article&c=12&cid=2#tab:homeTab:crumb:8:artId:1212:src:article)
+ - Clone the repo
+ 
+    ```bash
+    git clone https://github.com/CamiloGarciaLaRotta/TR-API.git
+    cd TR-API
+   ```
  - Create a `.env` file in the base directory of the repo with the following:
+ 
     ```bash
     DB_USERNAME=<your_username>
     DB_PASSWORD=<your_password>
     ```
 
-## Through Docker
+### Through Docker
 
 Build the Docker image from the base directory
 
@@ -33,23 +42,7 @@ docker run \
   tr-api:latest
 ```
 
-## Directly on your machine
-
-Set your ENV variables and run the API server
-```bash
-source .env
-python api/main.py
-```
-
-Visit the API on [http://localhost:8080/api/swagger](http://localhost:5000/api/swagger).
-
-# How to contribute
-
-Clone the repo
-```bash
-git clone https://github.com/CamiloGarciaLaRotta/TR-API.git
-cd TR-API
-```
+### Directly on your machine
 
 Create a virtual environment and activate it
 ```bash
@@ -62,4 +55,10 @@ Install the dependencies
 
 ```bash
 pip install -r requirements.txt
+```
+
+Set your ENV variables and run the API server
+```bash
+source .env
+python api/main.py
 ```
