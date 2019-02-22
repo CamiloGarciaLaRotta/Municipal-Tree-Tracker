@@ -2,7 +2,7 @@ from flask_restplus import Resource
 
 from server.instance import server, db
 from models.civic_location import civic_loc
-from .dao import get_all, get_by_id, create_single, delete_by_id
+from .dao import get_all, get_by_id, create_single, update_single, delete_by_id
 
 api = server.api
 
@@ -19,13 +19,13 @@ class CivicList(Resource):
 
     @api.expect(civic_loc, validate=True)
     @api.marshal_with(civic_loc)
-    @api.response(404, 'Not Found')
+    @api.response(409, 'Conflict')
     def post(self):
         """Create a new civic location."""
         attrs = ['civic_addr', 'civic_type']
         vals = list(map(lambda attr: api.payload[attr], attrs))
         record = create_single(vals, attrs, 'civid', 'civic_location', db)
-        return record if record else ('Failed to insert', 404)
+        return record if record else ('Failed to insert', 409)
 
 
 @civic_ns.route('/<int:civid>')
@@ -43,7 +43,11 @@ class CivicLoc(Resource):
 
     @api.expect(civic_loc, validate=True)
     @api.marshal_with(civic_loc)
+    @api.response(409, 'Conflict')
     def put(self, civid):
         """Update a specific civic location."""
-        # TODO
-        pass
+        attrs = ['civic_addr', 'civic_type']
+        vals = list(map(lambda attr: api.payload[attr], attrs))
+        record = update_single(
+            vals, attrs, civid, 'civid', 'civic_location', db)
+        return record if record else ('Failed to update', 409)

@@ -2,7 +2,7 @@ from flask_restplus import Resource
 
 from server.instance import server, db
 from models.municipality import municipality
-from .dao import get_all, get_by_id, create_single, delete_by_id
+from .dao import get_all, get_by_id, create_single, update_single, delete_by_id
 
 api = server.api
 
@@ -19,14 +19,14 @@ class MunicipalityList(Resource):
 
     @api.expect(municipality, validate=True)
     @api.marshal_with(municipality)
-    @api.response(404, 'Not Found')
+    @api.response(409, 'Conflict')
     def post(self):
         """Create a new municipality."""
         # TODO how to handle optional values
         attrs = ['m_name', 'm_population', 'm_polygon']
         vals = list(map(lambda attr: api.payload[attr], attrs))
         record = create_single(vals, attrs, 'mid', 'municipality', db)
-        return record if record else ('Failed to insert', 404)
+        return record if record else ('Failed to insert', 409)
 
 
 @municipality_ns.route('/<int:mid>')
@@ -44,7 +44,10 @@ class Municipality(Resource):
 
     @api.expect(municipality, validate=True)
     @api.marshal_with(municipality)
+    @api.response(409, 'Conflict')
     def put(self, mid):
         """Update a specific municipality."""
-        # TODO
-        pass
+        attrs = ['m_name', 'm_population', 'm_polygon']
+        vals = list(map(lambda attr: api.payload[attr], attrs))
+        record = update_single(vals, attrs, mid, 'mid', 'municipality', db)
+        return record if record else ('Failed to update', 409)

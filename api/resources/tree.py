@@ -2,7 +2,7 @@ from flask_restplus import Resource
 
 from server.instance import server, db
 from models.tree import tree
-from .dao import get_all, get_by_id, create_single, delete_by_id
+from .dao import get_all, get_by_id, create_single, update_single, delete_by_id
 
 api = server.api
 
@@ -18,14 +18,14 @@ class TreeList(Resource):
 
     @api.expect(tree, validate=True)
     @api.marshal_with(tree)
-    @api.response(404, 'Not Found')
+    @api.response(409, 'Conflict')
     def post(self):
         """Create a new tree."""
         # TODO how to handle optional values
         attrs = ['species', 'planted_date', 'geog_loc']
         vals = list(map(lambda attr: api.payload[attr], attrs))
         record = create_single(vals, attrs, 'tid', 'tree', db)
-        return record if record else ('Failed to insert', 404)
+        return record if record else ('Failed to insert', 409)
 
 
 @tree_ns.route('/<int:tid>')
@@ -43,7 +43,10 @@ class Tree(Resource):
 
     @api.expect(tree, validate=True)
     @api.marshal_with(tree)
+    @api.response(409, 'Conflict')
     def put(self, tid):
         """Update a specific tree."""
-        # TODO
-        pass
+        attrs = ['species', 'planted_date', 'geog_loc']
+        vals = list(map(lambda attr: api.payload[attr], attrs))
+        record = update_single(vals, attrs, tid, 'tid', 'tree', db)
+        return record if record else ('Failed to update', 409)

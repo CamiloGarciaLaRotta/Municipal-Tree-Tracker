@@ -2,7 +2,7 @@ from flask_restplus import Resource
 
 from server.instance import server, db
 from models.city import city
-from .dao import get_all, get_by_id, create_single, delete_by_id
+from .dao import get_all, get_by_id, create_single, update_single, delete_by_id
 
 api = server.api
 
@@ -18,13 +18,13 @@ class CityList(Resource):
 
     @api.expect(city, validate=True)
     @api.marshal_with(city)
-    @api.response(404, 'Not Found')
+    @api.response(409, 'Conflict')
     def post(self):
         """Create a new city."""
         attrs = ['c_name', 'c_polygon']
         vals = list(map(lambda attr: api.payload[attr], attrs))
         record = create_single(vals, attrs, 'cid', 'city', db)
-        return record if record else ('Failed to insert', 404)
+        return record if record else ('Failed to insert', 409)
 
 
 @city_ns.route('/<int:cid>')
@@ -42,7 +42,9 @@ class City(Resource):
 
     @api.expect(city, validate=True)
     @api.marshal_with(city)
+    @api.response(409, 'Conflict')
     def put(self, cid):
-        """Update a specific city."""
-        # TODO
-        pass
+        attrs = ['c_name', 'c_polygon']
+        vals = list(map(lambda attr: api.payload[attr], attrs))
+        record = update_single(vals, attrs, cid, 'cid', 'city', db)
+        return record if record else ('Failed to update', 409)

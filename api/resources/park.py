@@ -2,7 +2,7 @@ from flask_restplus import Resource
 
 from server.instance import server, db
 from models.park import park
-from .dao import get_all, get_by_id, create_single, delete_by_id
+from .dao import get_all, get_by_id, create_single, update_single, delete_by_id
 
 api = server.api
 
@@ -18,14 +18,14 @@ class ParkList(Resource):
 
     @api.expect(park, validate=True)
     @api.marshal_with(park)
-    @api.response(404, 'Not Found')
+    @api.response(409, 'Conflict')
     def post(self):
         """Create a new park."""
         # TODO how to handle optional values
         attrs = ['p_name', 'p_polygon']
         vals = list(map(lambda attr: api.payload[attr], attrs))
         record = create_single(vals, attrs, 'pid', 'park', db)
-        return record if record else ('Failed to insert', 404)
+        return record if record else ('Failed to insert', 409)
 
 
 @park_ns.route('/<int:pid>')
@@ -43,7 +43,10 @@ class Park(Resource):
 
     @api.expect(park, validate=True)
     @api.marshal_with(park)
+    @api.response(409, 'Conflict')
     def put(self, pid):
         """Update a specific park."""
-        # TODO
-        pass
+        attrs = ['p_name', 'p_polygon']
+        vals = list(map(lambda attr: api.payload[attr], attrs))
+        record = update_single(vals, attrs, pid, 'pid', 'park', db)
+        return record if record else ('Failed to update', 409)
