@@ -1,6 +1,8 @@
 from flask_restplus import fields
 from server.instance import server
 
+civic_loc_type = ['RESIDENTIAL', 'INDUSTRIAL', 'COMERCIAL', 'FARM']
+
 civic_loc = server.api.model('Civic_loc', {
     'civid': fields.String(
         example='123',
@@ -15,5 +17,5 @@ civic_loc = server.api.model('Civic_loc', {
         required=True,
         example='COMERCIAL',
         description='Land usage type',
-        enum=['RESIDENTIAL', 'INDUSTRIAL', 'COMERCIAL', 'FARM']),
+        enum=civic_loc_type),
 })

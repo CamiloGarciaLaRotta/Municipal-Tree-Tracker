@@ -1,6 +1,18 @@
 from flask_restplus import fields
 from server.instance import server
 
+tree_species = ['ALDER', 'APPLE', 'ASPEN', 'BASSWOOD', 'BIRCH', 'LOCUST',
+                'BUCKEYE', 'BUCKTHORN', 'CALIFORNIALAUREL', 'CATALPA',
+                'CEDAR', 'CHERRY', 'CHESTNUT', 'CHINKAPIN', 'COTTONWOOD',
+                'CYPRESS', 'DOGWOOD', 'DOUGLASFIR', 'ELM', 'FIR', 'FILBERT',
+                'GIANTSEQUOIA', 'HAWTHORN', 'HAZEL', 'HEMLOCK', 'HONEYLOCUST',
+                'HOLLY', 'HORSECHESTNUT', 'INCENSECEDAR', 'JUNIPER', 'LARCH',
+                'MADRONE', 'MAPLE', 'MOUNTAINASH', 'MOUNTAINMAHOGANY', 'ASH',
+                'OAK', 'OREGONMYRTLE', 'PEAR', 'PINE', 'PLUM', 'POPLAR',
+                'REDCEDARARBORVITAE', 'REDWOOD', 'RUSSIANOLIVE', 'SPRUCE',
+                'SWEETGUM', 'SYCAMORE', 'TANOAK', 'TRUECEDAR', 'TRUEFIR',
+                'WALNUT', 'WHITECEDAR', 'WILLOW', 'YELLOWPOPLAR', 'YEW']
+
 tree = server.api.model('Tree', {
     'tid': fields.Integer(
         description='Tree ID'),
@@ -8,17 +20,7 @@ tree = server.api.model('Tree', {
         required=True,
         example='CEDAR',
         description='Scientific name',
-        enum=['ALDER', 'APPLE', 'ASH', 'ASPEN', 'BASSWOOD', 'BIRCH',
-              'BUCKEYE', 'BUCKTHORN', 'CALIFORNIALAUREL', 'CATALPA',
-              'CEDAR', 'CHERRY', 'CHESTNUT', 'CHINKAPIN', 'COTTONWOOD',
-              'CYPRESS', 'DOGWOOD', 'DOUGLASFIR', 'ELM', 'FIR', 'FILBERT',
-              'GIANTSEQUOIA', 'HAWTHORN', 'HAZEL', 'HEMLOCK', 'HONEYLOCUST',
-              'HOLLY', 'HORSECHESTNUT', 'INCENSECEDAR', 'JUNIPER', 'LARCH',
-              'LOCUST', 'MADRONE', 'MAPLE', 'MOUNTAINASH', 'MOUNTAINMAHOGANY',
-              'OAK', 'OREGONMYRTLE', 'PEAR', 'PINE', 'PLUM', 'POPLAR',
-              'REDCEDARARBORVITAE', 'REDWOOD', 'RUSSIANOLIVE', 'SPRUCE',
-              'SWEETGUM', 'SYCAMORE', 'TANOAK', 'TRUECEDAR', 'TRUEFIR',
-              'WALNUT', 'WHITECEDAR', 'WILLOW', 'YELLOWPOPLAR', 'YEW']),
+        enum=tree_species),
     'planted_date': fields.Date(
         required=True,
         example='2015-02-26',

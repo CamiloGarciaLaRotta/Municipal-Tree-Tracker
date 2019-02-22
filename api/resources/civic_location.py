@@ -1,13 +1,20 @@
 from flask_restplus import Resource
 
 from server.instance import server, db
-from models.civic_location import civic_loc
+from models.civic_location import civic_loc, civic_loc_type
 from .dao import get_all, get_by_id, create_single, update_single, delete_by_id
 
 api = server.api
 
 civic_ns = api.namespace(
     'civic_loc', description='civic location related endpoints')
+
+
+@civic_ns.route('/types')
+class CivicType(Resource):
+    def get(self):
+        """Retrieve all civic location types."""
+        return {"types": civic_loc_type}
 
 
 @civic_ns.route('')

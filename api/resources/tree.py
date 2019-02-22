@@ -1,12 +1,19 @@
 from flask_restplus import Resource
 
 from server.instance import server, db
-from models.tree import tree
+from models.tree import tree, tree_species
 from .dao import get_all, get_by_id, create_single, update_single, delete_by_id
 
 api = server.api
 
 tree_ns = api.namespace('trees', description='tree related endpoints')
+
+
+@tree_ns.route('/species')
+class TreeSpecies(Resource):
+    def get(self):
+        """Retrieve all tree species."""
+        return {'species': tree_species}
 
 
 @tree_ns.route('')
