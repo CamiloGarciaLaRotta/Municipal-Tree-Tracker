@@ -34,12 +34,7 @@ docker build --rm -f "Dockerfile" -t tr-api:latest .
 
 Run the container and map its localhost with your localhost
 ```bash
-docker run \
-  --rm \
-  -p 127.0.0.1:8080:8080\
-  --env-file=.env \
-  -it \
-  tr-api:latest
+docker run --rm -p 127.0.0.1:8080:8080 -it tr-api:latest
 ```
 
 ### Directly on your machine
@@ -57,8 +52,8 @@ Install the dependencies
 pip install -r requirements.txt
 ```
 
-Set your ENV variables and run the API server
+Run the API server
+
 ```bash
-source .env
 python api/main.py
 ```

@@ -14,7 +14,8 @@ LABEL Name=tr-api Version=0.0.1
 EXPOSE 8080
 
 COPY --from=builder /install /usr/local
-COPY api /api
 RUN apk --no-cache add libpq
 WORKDIR /api
+COPY api .
+COPY .env .
 CMD ["python3", "main.py"]
