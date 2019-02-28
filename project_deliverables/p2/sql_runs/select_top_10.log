@@ -1,0 +1,166 @@
+-- SELECT top 10
+SELECT * FROM ASSESSMENT LIMIT 10;
+ assess_date | assess_status |                   assess_action                    | tid | uid 
+-------------+---------------+----------------------------------------------------+-----+-----
+ 2019-05-03  | HEALTHY       | quam a odio in hac habitasse platea dictumst maece |  73 |  77
+ 2019-05-02  | DAMAGED       | sed sagittis nam congue risus semper porta volutpa | 225 | 160
+ 2019-05-03  | HEALTHY       | vestibulum eget vulputate ut ultrices vel augue ve | 236 | 229
+ 2019-05-06  | DAMAGED       | mauris enim leo rhoncus sed vestibulum sit amet cu |  45 | 173
+ 2019-05-07  | INFESTED      | vitae ipsum aliquam non mauris morbi non lectus al | 148 |  57
+ 1905-06-22  | TO_CUT        | sed magna at nunc commodo placerat praesent blandi | 205 | 103
+ 2019-05-03  | TO_CUT        | neque libero convallis eget eleifend luctus ultric | 227 |  40
+ 2019-02-02  | DAMAGED       | commodo placerat praesent blandit nam nulla intege | 181 |  49
+ 2019-05-02  | TO_CUT        | est quam pharetra magna ac consequat metus sapien  | 115 | 279
+ 2019-05-05  | TO_CUT        | dapibus nulla suscipit ligula in lacus curabitur a |  51 | 131
+(10 rows)
+
+SELECT * FROM CITY LIMIT 10;
+ cid |  c_name   |         c_polygon         
+-----+-----------+---------------------------
+   1 | Montr�al  | ((-100.883333,45.5))
+   2 | Vancouver | ((-101.05,49.25))
+   3 | Ottawa    | ((-101.233333,45.416667))
+   4 | Calgary   | ((-101.316667,51.083333))
+   5 | Edmonton  | ((-101.666667,53.55))
+   6 | Hamilton  | ((-101.883333,43.256101))
+   7 | Winnipeg  | ((-102.383333,49.883333))
+   8 | Qu�bec    | ((-102.466667,46.8))
+   9 | Oshawa    | ((-102.8,43.9))
+  10 | Kitchener | ((-103.85,43.446976))
+(10 rows)
+
+SELECT * FROM CIVIC_LOCATION LIMIT 10;
+ civid |      civic_address       | civic_type  
+-------+--------------------------+-------------
+     1 | 8652 Sheridan Crossing   | RESIDENTIAL
+     2 | 1915 Westerfield Parkway | RESIDENTIAL
+     3 | 97172 Corry Avenue       | FARM
+     4 | 55 Victoria Trail        | COMERCIAL
+     5 | 81703 Lunder Trail       | RESIDENTIAL
+     6 | 7554 Stoughton Way       | RESIDENTIAL
+     7 | 32459 Pleasure Place     | COMERCIAL
+     8 | 59 Rockefeller Hill      | INDUSTRIAL
+     9 | 8 Becker Road            | COMERCIAL
+    10 | 6272 Nobel Terrace       | FARM
+(10 rows)
+
+SELECT * FROM MUNICIPALITY LIMIT 10;
+ mid |      m_name      | m_population |               m_polygon               | cid 
+-----+------------------+--------------+---------------------------------------+-----
+   4 | Aguanish         |          245 | ((86.6347815518993,98.4735763113282)) | 169
+   6 | Albertville      |          226 | ((66.3895374559191,26.6170437377988)) | 191
+   7 | Alleyn-et-Cawood |          172 | ((79.9361119180922,56.4262209855193)) | 103
+  13 | Angliers         |          303 | ((42.7870097456129,33.076358474327))  |  63
+  15 | Arundel          |          563 | ((61.6462873931565,11.3473824264874)) |  71
+  18 | Aston-Jonction   |          424 | ((95.9451772969354,41.4011406782694)) | 132
+  19 | Auclair          |          448 | ((40.8770277968757,42.9571506555944)) | 231
+  20 | Audet            |          734 | ((69.6391906153656,13.6700733082219)) | 179
+  21 | Aumond           |          754 | ((29.7978719951445,1.62271488691239)) | 203
+  23 | Authier          |          268 | ((3.28320856689527,46.6373565074225)) |  60
+(10 rows)
+
+SELECT * FROM ORDERS LIMIT 10;
+ transid | uid 
+---------+-----
+     186 |  74
+     366 |  74
+     188 | 184
+       2 | 366
+     335 | 295
+     237 |  72
+     318 | 116
+      88 | 103
+     348 |   6
+     338 |  46
+(10 rows)
+
+SELECT * FROM PARK LIMIT 10;
+ pid |                   p_name                   |        p_polygon         | mid 
+-----+--------------------------------------------+--------------------------+-----
+   2 | SAULT-AU-RÉCOLLET                          | ((-73.654402,45.57114))  | 227
+   3 | MERCI, DE LA                               | ((-73.695318,45.547073)) | 140
+   5 | MARCELIN-WILSON                            | ((-73.687882,45.537813)) |  37
+   6 | SAINTE-ODILE                               | ((-73.704563,45.534982)) |  59
+   7 | GOUIN (SOPHIE-BARAT)                       | ((-73.668241,45.561523)) | 226
+  12 | AHUNTSIC                                   | ((-73.66406,45.555829))  |  31
+  13 | GABRIEL-LALEMANT                           | ((-73.642789,45.570466)) | 223
+  15 | MAISON DE LA CULTURE AHUNTSIC-CARTIERVILLE | ((-73.663139,45.553637)) | 172
+  19 | PERRY, ILE                                 | ((-73.697224,45.547761)) | 206
+  20 | BERTHE-LOUARD NORD                         | ((-73.644508,45.556841)) | 155
+(10 rows)
+
+SELECT * FROM REVIEW LIMIT 10;
+ transid | uid 
+---------+-----
+      63 | 360
+      73 | 158
+     106 | 206
+     245 | 218
+     347 |  64
+     143 | 102
+     145 | 245
+     171 | 352
+      63 |  14
+      75 | 138
+(10 rows)
+
+SELECT * FROM TRANSACTIONS LIMIT 10;
+ transid | trans_status |   tree_species   | civid 
+---------+--------------+------------------+-------
+       1 | REFUSED      | HAWTHORN         |   215
+       2 | APPROVED     | CALIFORNIALAUREL |   202
+       3 | APPROVED     | INCENSECEDAR     |   233
+       4 | PENDING      | SWEETGUM         |   224
+       5 | APPROVED     | MADRONE          |   317
+       6 | APPROVED     | JUNIPER          |   112
+       7 | APPROVED     | PLUM             |   360
+       8 | REFUSED      | PINE             |   127
+       9 | APPROVED     | SYCAMORE         |   220
+      10 | APPROVED     | MADRONE          |   164
+(10 rows)
+
+SELECT * FROM TREE LIMIT 10;
+ tid  |         geog_loc         | planted_date |   species    | mid | pid | civid 
+------+--------------------------+--------------+--------------+-----+-----+-------
+ 1111 | (47.651,-122.349)        | 2019-01-01   | ALDER        |   4 |   2 |     3
+   18 | (287965.452,5044070.727) | 2018-06-27   | TRUEFIR      |  84 |  21 |   349
+   24 | (299085.781,5046918)     | 2015-12-18   | ASPEN        | 129 | 135 |   218
+   45 | (292828.499,5047813.872) | 2018-07-31   | CHERRY       | 190 |  91 |   379
+   51 | (292813.787,5047823.434) | 2018-07-31   | MOUNTAINASH  |  33 | 212 |    41
+   58 | (292828.349,5047809.829) | 2018-07-31   | SWEETGUM     | 158 | 124 |   160
+   67 | (299369.572,5042501)     | 2018-10-24   | GIANTSEQUOIA |  73 | 204 |   274
+   73 | (299406.531,5042542.5)   | 2017-08-15   | BASSWOOD     | 173 | 159 |   195
+   78 | (299247.856,5038138.5)   | 2007-07-04   | CHERRY       | 166 | 160 |   236
+   87 | (299316.122,5042403.5)   | 2017-08-15   | BIRCH        | 109 |   5 |   360
+(10 rows)
+
+SELECT * FROM USERS LIMIT 10;
+ uid |    u_type     |  u_name   |          u_email          |   u_phone    | civid 
+-----+---------------+-----------+---------------------------+--------------+-------
+   1 | ENV_SCIENTIST | Rochette  | rmarquese0@meetup.com     | 306-171-8098 |   233
+   2 | ENV_SCIENTIST | Elwira    | efaulkener1@state.tx.us   | 262-468-6254 |   145
+   3 | RESIDENT      | Amory     | adallimore2@hc360.com     | 888-980-5313 |   114
+   4 | RESIDENT      | Odille    | olarciere3@deviantart.com | 478-488-2661 |   326
+   5 | URBAN_PLANNER | Yuma      | ybackshill4@furl.net      | 250-469-5054 |   373
+   6 | ENV_SCIENTIST | Port      | pbostock5@ft.com          | 578-850-0790 |     9
+   7 | ENV_SCIENTIST | Ashely    | akrink6@discuz.net        | 931-115-0534 |   276
+   8 | ENV_SCIENTIST | Dave      | dgiffon7@pcworld.com      | 750-199-5939 |   269
+   9 | URBAN_PLANNER | Mordecai  | mscraney8@wikispaces.com  | 458-312-3866 |   188
+  10 | RESIDENT      | Millisent | mbakhrushkin9@vinaora.com | 222-354-8890 |   379
+(10 rows)
+
+SELECT * FROM WORKS_FOR LIMIT 10;
+ start_date | cid | uid 
+------------+-----+-----
+ 2018-03-26 |  20 | 110
+ 2018-10-29 | 109 | 343
+ 2018-07-29 | 141 | 340
+ 2019-02-17 | 216 | 266
+ 2018-05-29 |  81 | 203
+ 2018-12-13 |  48 | 222
+ 2019-02-12 |  78 | 297
+ 2018-11-19 | 195 | 358
+ 2018-11-15 |  38 | 335
+ 2019-02-24 | 151 | 171
+(10 rows)
+

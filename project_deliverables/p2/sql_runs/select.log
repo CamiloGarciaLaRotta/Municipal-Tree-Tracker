@@ -1,0 +1,111 @@
+-- Select Statements
+SELECT * FROM ASSESSMENT;
+ assess_date | assess_status |   assess_action   | tid | uid 
+-------------+---------------+-------------------+-----+-----
+ 2019-01-01  | HEALTHY       | leave it as is :) |   1 |   1
+ 2013-03-02  | TO_CUT        | leave it as is :) |   2 |   2
+ 2011-02-03  | INFESTED      | leave it as is :) |   3 |   3
+ 2013-08-04  | DAMAGED       | leave it as is :) |   4 |   4
+ 2012-02-05  | HEALTHY       | leave it as is :) |   5 |   5
+(5 rows)
+
+SELECT * FROM CITY;
+ cid |  c_name   |         c_polygon         
+-----+-----------+---------------------------
+   1 | Montreal  | ((2,2),(3,4),(3,6),(1,1))
+   2 | Laval     | ((2,2),(3,4),(3,6),(1,1))
+   3 | Toronto   | ((2,2),(3,4),(3,6),(1,1))
+   4 | Vancouver | ((2,2),(3,4),(3,6),(1,1))
+   5 | NewYork   | ((2,2),(3,4),(3,6),(1,1))
+(5 rows)
+
+SELECT * FROM CIVIC_LOCATION;
+ civid |      civic_address      | civic_type  
+-------+-------------------------+-------------
+     1 | 324 cote vertu          | RESIDENTIAL
+     2 | 324 de le concorde      | RESIDENTIAL
+     3 | 3919 west 18th avenue   | INDUSTRIAL
+     4 | 2131 rue de le victoire | COMERCIAL
+     5 | 3 watson street         | FARM
+(5 rows)
+
+SELECT * FROM MUNICIPALITY;
+ mid |   m_name    | m_population |         m_polygon         | cid 
+-----+-------------+--------------+---------------------------+-----
+   1 | Ville Marie |        33333 | ((2,2),(3,4),(3,6),(1,1)) |   1
+   2 | Queens      |        33333 | ((2,2),(3,4),(3,6),(1,1)) |   5
+   3 | Mont Royal  |        33333 | ((2,2),(3,4),(3,6),(1,1)) |   1
+   4 | WestMount   |        33333 | ((2,2),(3,4),(3,6),(1,1)) |   1
+   5 | Concorde    |        33333 | ((2,2),(3,4),(3,6),(1,1)) |   2
+(5 rows)
+
+SELECT * FROM ORDERS;
+ transid | uid 
+---------+-----
+       1 |   1
+       2 |   2
+       3 |   3
+       4 |   4
+       5 |   5
+(5 rows)
+
+SELECT * FROM PARK;
+ pid |    p_name    |         p_polygon         | mid 
+-----+--------------+---------------------------+-----
+   1 | mont royal   | ((2,2),(3,4),(3,6),(1,1)) |   1
+   2 | central park | ((2,2),(3,4),(3,6),(1,1)) |   2
+   3 | park de rose | ((2,2),(3,4),(3,6),(1,1)) |   3
+   4 | freedom park | ((2,2),(3,4),(3,6),(1,1)) |   4
+   5 | joy park     | ((2,2),(3,4),(3,6),(1,1)) |   5
+(5 rows)
+
+SELECT * FROM REVIEW;
+ transid | uid 
+---------+-----
+       1 |   1
+       2 |   2
+       3 |   3
+       4 |   4
+       5 |   5
+(5 rows)
+
+SELECT * FROM TRANSACTIONS;
+ transid | trans_status |   tree_species   | civid 
+---------+--------------+------------------+-------
+       1 | REFUSED      | ALDER            |     1
+       2 | APPROVED     | CALIFORNIALAUREL |     2
+       3 | REFUSED      | CEDAR            |     3
+       4 | PENDING      | CHESTNUT         |     4
+       5 | APPROVED     | CHERRY           |     5
+(5 rows)
+
+SELECT * FROM TREE;
+ tid |     geog_loc      | planted_date |  species   | mid | pid | civid 
+-----+-------------------+--------------+------------+-----+-----+-------
+   1 | (47.651,-122.349) | 2019-01-01   | ALDER      |   1 |   1 |     1
+   2 | (47.651,-122.349) | 2015-03-01   | COTTONWOOD |   2 |   2 |     2
+   3 | (47.651,-122.349) | 2011-04-01   | CHINKAPIN  |   3 |   3 |     3
+   4 | (47.651,-122.349) | 2012-05-01   | CHESTNUT   |   4 |   4 |     4
+   5 | (47.651,-122.349) | 2013-06-01   | CHERRY     |   5 |   5 |     5
+(5 rows)
+
+SELECT * FROM USERS;
+ uid |    u_type     | u_name |      u_email      |  u_phone   | civid 
+-----+---------------+--------+-------------------+------------+-------
+   1 | RESIDENT      | elias  | elias@elias.ca    | 4232828282 |     1
+   2 | RESIDENT      | patrik | patriks@patrik.ca | 4232228282 |     2
+   3 | ENV_SCIENTIST | majd   | majd@majd.ca      | 4232818282 |     3
+   4 | URBAN_PLANNER | rose   | rose@rose.ca      | 4232823292 |     4
+   5 | URBAN_PLANNER | marie  | marie@marie.ca    | 4233382282 |     5
+(5 rows)
+
+SELECT * FROM WORKS_FOR;
+ start_date | cid | uid 
+------------+-----+-----
+ 2019-01-01 |   1 |   1
+ 2012-01-01 |   2 |   2
+ 2013-01-01 |   3 |   3
+ 2011-01-01 |   4 |   4
+ 2010-01-01 |   5 |   5
+(5 rows)
+
