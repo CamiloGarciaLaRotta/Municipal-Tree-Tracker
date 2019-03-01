@@ -1,0 +1,164 @@
+\d assessment;
+                                   Table "cs421g07.assessment"
+    Column     |         Type          |                        Modifiers                         
+---------------+-----------------------+----------------------------------------------------------
+ assess_date   | date                  | not null
+ assess_status | assess_status         | not null
+ assess_action | character varying(50) | not null
+ tid           | integer               | not null default nextval('assessment_tid_seq'::regclass)
+ uid           | integer               | not null default nextval('assessment_uid_seq'::regclass)
+Indexes:
+    "assessment_pkey" PRIMARY KEY, btree (assess_date, tid, uid)
+Foreign-key constraints:
+    "assess_tid_fkey" FOREIGN KEY (tid) REFERENCES tree(tid) ON UPDATE RESTRICT ON DELETE RESTRICT
+    "assess_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+
+\d city;
+                                 Table "cs421g07.city"
+  Column   |         Type          |                     Modifiers                      
+-----------+-----------------------+----------------------------------------------------
+ cid       | integer               | not null default nextval('city_cid_seq'::regclass)
+ c_name    | character varying(50) | not null
+ c_polygon | polygon               | not null
+Indexes:
+    "city_pkey" PRIMARY KEY, btree (cid)
+Referenced by:
+    TABLE "municipality" CONSTRAINT "municipality_cid_fkey" FOREIGN KEY (cid) REFERENCES city(cid) ON UPDATE RESTRICT ON DELETE SET NULL
+    TABLE "works_for" CONSTRAINT "works_cid_fkey" FOREIGN KEY (cid) REFERENCES city(cid) ON UPDATE RESTRICT ON DELETE SET NULL
+
+\d civic_location;
+                                    Table "cs421g07.civic_location"
+    Column     |         Type          |                           Modifiers                            
+---------------+-----------------------+----------------------------------------------------------------
+ civid         | integer               | not null default nextval('civic_location_civid_seq'::regclass)
+ civic_address | character varying(50) | not null
+ civic_type    | civic_type            | not null
+Indexes:
+    "civic_location_pkey" PRIMARY KEY, btree (civid)
+Referenced by:
+    TABLE "transactions" CONSTRAINT "transaction_civid_fkey" FOREIGN KEY (civid) REFERENCES civic_location(civid) ON UPDATE RESTRICT ON DELETE SET NULL
+    TABLE "tree" CONSTRAINT "tree_civid_fkey" FOREIGN KEY (civid) REFERENCES civic_location(civid) ON UPDATE RESTRICT ON DELETE SET NULL
+    TABLE "users" CONSTRAINT "user_civid_fkey" FOREIGN KEY (civid) REFERENCES civic_location(civid) ON UPDATE RESTRICT ON DELETE SET NULL
+
+\d municipality;
+                                   Table "cs421g07.municipality"
+    Column    |         Type          |                         Modifiers                          
+--------------+-----------------------+------------------------------------------------------------
+ mid          | integer               | not null default nextval('municipality_mid_seq'::regclass)
+ m_name       | character varying(50) | not null
+ m_population | integer               | not null
+ m_polygon    | polygon               | not null
+ cid          | integer               | not null
+Indexes:
+    "municipality_pkey" PRIMARY KEY, btree (mid)
+Check constraints:
+    "positive_pop" CHECK (m_population > 0)
+Foreign-key constraints:
+    "municipality_cid_fkey" FOREIGN KEY (cid) REFERENCES city(cid) ON UPDATE RESTRICT ON DELETE SET NULL
+Referenced by:
+    TABLE "park" CONSTRAINT "park_mid_fkey" FOREIGN KEY (mid) REFERENCES municipality(mid) ON UPDATE RESTRICT ON DELETE SET NULL
+    TABLE "tree" CONSTRAINT "tree_mid_fkey" FOREIGN KEY (mid) REFERENCES municipality(mid) ON UPDATE RESTRICT ON DELETE SET NULL
+
+\d orders;
+    Table "cs421g07.orders"
+ Column  |  Type   | Modifiers 
+---------+---------+-----------
+ transid | integer | 
+ uid     | integer | 
+Foreign-key constraints:
+    "order_transid_fkey" FOREIGN KEY (transid) REFERENCES transactions(transid) ON UPDATE RESTRICT ON DELETE RESTRICT
+    "order_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+
+\d park;
+                                 Table "cs421g07.park"
+  Column   |         Type          |                     Modifiers                      
+-----------+-----------------------+----------------------------------------------------
+ pid       | integer               | not null default nextval('park_pid_seq'::regclass)
+ p_name    | character varying(50) | not null
+ p_polygon | polygon               | not null
+ mid       | integer               | not null
+Indexes:
+    "park_pkey" PRIMARY KEY, btree (pid)
+Foreign-key constraints:
+    "park_mid_fkey" FOREIGN KEY (mid) REFERENCES municipality(mid) ON UPDATE RESTRICT ON DELETE SET NULL
+Referenced by:
+    TABLE "tree" CONSTRAINT "tree_pid_fkey" FOREIGN KEY (pid) REFERENCES park(pid) ON UPDATE RESTRICT ON DELETE SET NULL
+
+\d review;
+    Table "cs421g07.review"
+ Column  |  Type   | Modifiers 
+---------+---------+-----------
+ transid | integer | 
+ uid     | integer | 
+Foreign-key constraints:
+    "review_transid_fkey" FOREIGN KEY (transid) REFERENCES transactions(transid) ON UPDATE RESTRICT ON DELETE SET NULL
+    "review_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+
+\d transactions;
+                                   Table "cs421g07.transactions"
+    Column    |        Type        |                           Modifiers                            
+--------------+--------------------+----------------------------------------------------------------
+ transid      | integer            | not null default nextval('transactions_transid_seq'::regclass)
+ trans_status | transaction_status | not null
+ tree_species | tree_species       | not null
+ civid        | integer            | not null
+Indexes:
+    "transactions_pkey" PRIMARY KEY, btree (transid)
+Foreign-key constraints:
+    "transaction_civid_fkey" FOREIGN KEY (civid) REFERENCES civic_location(civid) ON UPDATE RESTRICT ON DELETE SET NULL
+Referenced by:
+    TABLE "orders" CONSTRAINT "order_transid_fkey" FOREIGN KEY (transid) REFERENCES transactions(transid) ON UPDATE RESTRICT ON DELETE RESTRICT
+    TABLE "review" CONSTRAINT "review_transid_fkey" FOREIGN KEY (transid) REFERENCES transactions(transid) ON UPDATE RESTRICT ON DELETE SET NULL
+
+\d tree;
+                              Table "cs421g07.tree"
+    Column    |     Type     |                     Modifiers                      
+--------------+--------------+----------------------------------------------------
+ tid          | integer      | not null default nextval('tree_tid_seq'::regclass)
+ geog_loc     | point        | not null
+ planted_date | date         | not null
+ species      | tree_species | not null
+ mid          | integer      | not null
+ pid          | integer      | 
+ civid        | integer      | 
+Indexes:
+    "tree_pkey" PRIMARY KEY, btree (tid)
+Foreign-key constraints:
+    "tree_civid_fkey" FOREIGN KEY (civid) REFERENCES civic_location(civid) ON UPDATE RESTRICT ON DELETE SET NULL
+    "tree_mid_fkey" FOREIGN KEY (mid) REFERENCES municipality(mid) ON UPDATE RESTRICT ON DELETE SET NULL
+    "tree_pid_fkey" FOREIGN KEY (pid) REFERENCES park(pid) ON UPDATE RESTRICT ON DELETE SET NULL
+Referenced by:
+    TABLE "assessment" CONSTRAINT "assess_tid_fkey" FOREIGN KEY (tid) REFERENCES tree(tid) ON UPDATE RESTRICT ON DELETE RESTRICT
+
+\d users;
+                                Table "cs421g07.users"
+ Column  |         Type          |                      Modifiers                      
+---------+-----------------------+-----------------------------------------------------
+ uid     | integer               | not null default nextval('users_uid_seq'::regclass)
+ u_type  | user_type             | not null
+ u_name  | character varying(50) | not null
+ u_email | character varying(50) | not null
+ u_phone | character varying(50) | not null
+ civid   | integer               | not null
+Indexes:
+    "users_pkey" PRIMARY KEY, btree (uid)
+    "users_u_email_key" UNIQUE CONSTRAINT, btree (u_email)
+Foreign-key constraints:
+    "user_civid_fkey" FOREIGN KEY (civid) REFERENCES civic_location(civid) ON UPDATE RESTRICT ON DELETE SET NULL
+Referenced by:
+    TABLE "assessment" CONSTRAINT "assess_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+    TABLE "orders" CONSTRAINT "order_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+    TABLE "review" CONSTRAINT "review_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+    TABLE "works_for" CONSTRAINT "works_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+
+\d works_for;
+    Table "cs421g07.works_for"
+   Column   |  Type   | Modifiers 
+------------+---------+-----------
+ start_date | date    | not null
+ cid        | integer | 
+ uid        | integer | 
+Foreign-key constraints:
+    "works_cid_fkey" FOREIGN KEY (cid) REFERENCES city(cid) ON UPDATE RESTRICT ON DELETE SET NULL
+    "works_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+
