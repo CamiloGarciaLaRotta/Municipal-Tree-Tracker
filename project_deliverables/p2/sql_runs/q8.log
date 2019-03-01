@@ -1,0 +1,46 @@
+-- 8.1
+-- Add the constraint that all workers should start after 2015
+ALTER TABLE works_for                                 
+ADD CONSTRAINT start_from_2015 
+CHECK (start_date > '2015-01-01');
+ALTER TABLE
+\d+ works_for;
+                       Table "cs421g07.works_for"
+   Column   |  Type   | Modifiers | Storage | Stats target | Description 
+------------+---------+-----------+---------+--------------+-------------
+ start_date | date    | not null  | plain   |              | 
+ cid        | integer |           | plain   |              | 
+ uid        | integer |           | plain   |              | 
+Check constraints:
+    "start_from_2015" CHECK (start_date > '2015-01-01'::date)
+Foreign-key constraints:
+    "works_cid_fkey" FOREIGN KEY (cid) REFERENCES city(cid) ON UPDATE RESTRICT ON DELETE SET NULL
+    "works_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+
+-- 8.2
+-- Add constraint that all user's email address should be valid (have an @)
+ALTER TABLE users ADD CONSTRAINT valid_email CHECK (u_email LIKE '%@%');
+ALTER TABLE
+\d+ users;
+                                                    Table "cs421g07.users"
+ Column  |         Type          |                      Modifiers                      | Storage  | Stats target | Description 
+---------+-----------------------+-----------------------------------------------------+----------+--------------+-------------
+ uid     | integer               | not null default nextval('users_uid_seq'::regclass) | plain    |              | 
+ u_type  | user_type             | not null                                            | plain    |              | 
+ u_name  | character varying(50) | not null                                            | extended |              | 
+ u_email | character varying(50) | not null                                            | extended |              | 
+ u_phone | character varying(50) | not null                                            | extended |              | 
+ civid   | integer               | not null                                            | plain    |              | 
+Indexes:
+    "users_pkey" PRIMARY KEY, btree (uid)
+    "users_u_email_key" UNIQUE CONSTRAINT, btree (u_email)
+Check constraints:
+    "valid_email" CHECK (u_email::text ~~ '%@%'::text)
+Foreign-key constraints:
+    "user_civid_fkey" FOREIGN KEY (civid) REFERENCES civic_location(civid) ON UPDATE RESTRICT ON DELETE SET NULL
+Referenced by:
+    TABLE "assessment" CONSTRAINT "assess_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+    TABLE "orders" CONSTRAINT "order_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+    TABLE "review" CONSTRAINT "review_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+    TABLE "works_for" CONSTRAINT "works_uid_fkey" FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE RESTRICT ON DELETE RESTRICT
+

@@ -1,0 +1,136 @@
+-- 5.1
+-- relations used: city, municipality
+-- query: list the names of cities that have more than 2 municipalities in descending order
+SELECT city.c_name, COUNT(mid) as num_municipality 
+FROM city, municipality WHERE municipality.cid = city.cid 
+GROUP BY city.c_name HAVING COUNT(mid) > 2 
+ORDER BY COUNT(mid) DESC;
+       c_name       | num_municipality 
+--------------------+------------------
+ Powell River       |                4
+ Mingan             |                4
+ Barrie             |                4
+ Timmins            |                3
+ Prince Albert      |                3
+ Berens River       |                3
+ Hamilton           |                3
+ Pembroke           |                3
+ Kamloops           |                3
+ Smithers           |                3
+ Red Lake           |                3
+ Stony Rapids       |                3
+ Dryden             |                3
+ Hall Beach         |                3
+ Happy Valley       |                3
+ La Scie            |                3
+ Chesterfield Inlet |                3
+(17 rows)
+
+-- 5.2
+-- relations used: works_for
+-- query: display the uids of workers who started working after Feb 2019
+SELECT uid, start_date FROM works_for WHERE start_date > '2019-02-01' ORDER BY start_date;
+ uid | start_date 
+-----+------------
+ 276 | 2019-02-03
+  46 | 2019-02-04
+  21 | 2019-02-05
+  71 | 2019-02-06
+ 169 | 2019-02-06
+  63 | 2019-02-08
+ 274 | 2019-02-08
+ 253 | 2019-02-09
+ 271 | 2019-02-11
+ 297 | 2019-02-12
+  32 | 2019-02-12
+   9 | 2019-02-14
+ 357 | 2019-02-15
+ 244 | 2019-02-15
+ 151 | 2019-02-15
+ 266 | 2019-02-17
+ 329 | 2019-02-17
+ 387 | 2019-02-18
+  39 | 2019-02-19
+ 126 | 2019-02-19
+ 257 | 2019-02-20
+  19 | 2019-02-20
+ 111 | 2019-02-21
+   8 | 2019-02-22
+ 275 | 2019-02-22
+ 379 | 2019-02-22
+ 206 | 2019-02-22
+ 111 | 2019-02-23
+ 257 | 2019-02-23
+ 171 | 2019-02-24
+ 300 | 2019-02-24
+(31 rows)
+
+-- 5.3
+-- relations used: municipality, tree
+-- query: display the names of the municipalities that have more than 2 trees located inside, and the count of trees, in descending order
+SELECT municipality.m_name, COUNT(tid) as tree_count
+FROM municipality, tree 
+WHERE municipality.mid = tree.mid 
+GROUP BY municipality.m_name HAVING count(tid) >2 
+ORDER BY tree_count DESC, municipality.m_name;
+    m_name    | tree_count 
+--------------+------------
+ Clerval      |          5
+ Chazel       |          4
+ Belcourt     |          3
+ Bolton-Est   |          3
+ Bolton-Ouest |          3
+ Brome        |          3
+ Elgin        |          3
+(7 rows)
+
+-- 5.4
+-- relations used: users, orders
+-- query: Find all the users who have placed more than 5 orders and display their uid, names and email addresses in descending order of number of orders placed.
+SELECT users.uid, u_name, users.u_email, COUNT(transid) as number_of_orders_placed
+FROM users, orders
+WHERE orders.uid = users.uid
+GROUP BY u_name, users.uid, users.u_email HAVING COUNT(transid) > 5
+ORDER BY number_of_orders_placed DESC, u_name;
+ uid | u_name  |           u_email           | number_of_orders_placed 
+-----+---------+-----------------------------+-------------------------
+ 315 | Ardis   | afritz8q@blogs.com          |                       7
+  96 | Calida  | cskells2n@feedburner.com    |                       7
+ 270 | Octavia | oraincin7h@who.int          |                       7
+ 234 | Gran    | gjune6h@ucla.edu            |                       6
+ 149 | Janaye  | jlaverack44@nifty.com       |                       6
+ 242 | Marsh   | mgiraudeau6p@infoseek.co.jp |                       6
+ 360 | Sibyl   | smollen9z@lycos.com         |                       6
+(7 rows)
+
+-- 5.5
+-- relations used: works_for, city
+-- query: find all the cities that have more than 3 workers in descending order, and displays the cid, city name and the number of workers
+SELECT city.cid, city.c_name, COUNT(works_for.uid) as number_of_workers 
+FROM works_for, city WHERE works_for.cid = city.cid 
+GROUP BY city.cid, city.c_name HAVING COUNT(uid) > 3 
+ORDER BY COUNT(works_for.uid) DESC, city.c_name;
+ cid |     c_name      | number_of_workers 
+-----+-----------------+-------------------
+  86 | Dolbeau         |                 6
+ 214 | Fort Resolution |                 6
+ 236 | Fort Severn     |                 6
+  98 | Weyburn         |                 6
+  16 | Barrie          |                 5
+  92 | Dawson Creek    |                 5
+ 112 | Fort Nelson     |                 5
+ 178 | Geraldton       |                 5
+ 106 | Yarmouth        |                 5
+  94 | Baie-Comeau     |                 4
+ 154 | Biggar          |                 4
+ 188 | Churchill       |                 4
+ 133 | Digby           |                 4
+ 177 | Kugluktuk       |                 4
+ 195 | La Scie         |                 4
+ 146 | Lillooet        |                 4
+ 125 | Marathon        |                 4
+ 151 | Nelson House    |                 4
+ 231 | Oxford House    |                 4
+  32 | Red Deer        |                 4
+(20 rows)
+
