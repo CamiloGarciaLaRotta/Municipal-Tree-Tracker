@@ -26,8 +26,11 @@ npm run e2e
 # run all tests
 npm test
 
-# run with docker
+# build with docker for production
 docker build .
+
+# run with docker for production
+docker run -it -p 80:80 <image>
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
