@@ -29,7 +29,7 @@ class CivicList(Resource):
     @api.response(409, 'Conflict')
     def post(self):
         """Create a new civic location."""
-        attrs = ['civic_addr', 'civic_type']
+        attrs = ['civic_address', 'civic_type']
         vals = list(map(lambda attr: api.payload[attr], attrs))
         record = create_single(vals, attrs, 'civid', 'civic_location', db)
         return record if record else ('Failed to insert', 409)
@@ -53,7 +53,7 @@ class CivicLoc(Resource):
     @api.response(409, 'Conflict')
     def put(self, civid):
         """Update a specific civic location."""
-        attrs = ['civic_addr', 'civic_type']
+        attrs = ['civic_address', 'civic_type']
         vals = list(map(lambda attr: api.payload[attr], attrs))
         record = update_single(
             vals, attrs, civid, 'civid', 'civic_location', db)

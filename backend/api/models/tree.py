@@ -29,11 +29,14 @@ tree = server.api.model('Tree', {
         required=True,
         example='(1.0,2.0)',
         description='Geographic location of the tree'),
-    'm_name': fields.String(
+    'mid': fields.String(
         required=True,
-        example='St-Henri',
-        description='Municipality in which the tree is located'),
-    'p_name': fields.String(
-        example='Parc Angrignon',
-        description='Parc in which the tree is located')
+        example='169',
+        description='ID of the municipality in which the tree is located'),
+    'pid': fields.String(
+        example='6',
+        description='ID of the parc in which the tree is located'),
+    'civid': fields.String(
+        example='12',
+        description='ID of the civic address in which the tree is located')
 })

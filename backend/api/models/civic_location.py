@@ -7,7 +7,7 @@ civic_loc = server.api.model('Civic_loc', {
     'civid': fields.String(
         example='123',
         description='Civic location ID'),
-    'civic_addr': fields.String(
+    'civic_address': fields.String(
         required=True,
         example='3700 Ave. Benny',
         min_length=1,
