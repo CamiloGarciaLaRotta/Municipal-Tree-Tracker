@@ -18,4 +18,5 @@ RUN apk --no-cache add libpq
 WORKDIR /api
 COPY api .
 COPY .env .
+RUN source .env
 CMD ["python3", "main.py"]

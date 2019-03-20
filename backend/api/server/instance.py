@@ -12,7 +12,7 @@ class Server(object):
                        version='0.1',
                        title='Tree Tracker API',
                        description='Fictional tree management system API',
-                       doc=environment_config["swagger-url"]
+                       doc=environment_config['swagger-url']
                        )
 
     def run(self):
