@@ -1,4 +1,3 @@
-import sys
 from flask import abort
 from flask_restplus import Resource
 

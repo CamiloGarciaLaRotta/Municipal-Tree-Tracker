@@ -15,9 +15,8 @@ park = server.api.model('Park', {
         required=True,
         example='((1.0,0.0),(0.0,0.0),(2.0,3.0))',
         description='Park\'s polygon in Postgres Polygon format'),
-    'm_name': fields.String(
-        example='St-Henri',
-        min_length=1,
-        max_length=50,
-        description='Municipality name to which the park belongs')
+    'mid': fields.String(
+        required=True,
+        example='169',
+        description='ID of the municipality to which the park belongs')
 })

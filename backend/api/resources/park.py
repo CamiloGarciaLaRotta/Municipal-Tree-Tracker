@@ -1,3 +1,4 @@
+from flask import abort
 from flask_restplus import Resource
 
 from server.instance import server, db
@@ -18,14 +19,14 @@ class ParkList(Resource):
 
     @api.expect(park, validate=True)
     @api.marshal_with(park)
-    @api.response(409, 'Conflict')
     def post(self):
         """Create a new park."""
-        # TODO how to handle optional values
-        attrs = ['p_name', 'p_polygon']
+        attrs = ['p_name', 'p_polygon', 'mid']
         vals = list(map(lambda attr: api.payload[attr], attrs))
-        record = create_single(vals, attrs, 'pid', 'park', db)
-        return record if record else ('Failed to insert', 409)
+        try:
+            return create_single(vals, attrs, 'pid', 'park', db)
+        except Exception as e:
+            abort(400, str(e))
 
 
 @park_ns.route('/<int:pid>')
@@ -43,10 +44,11 @@ class Park(Resource):
 
     @api.expect(park, validate=True)
     @api.marshal_with(park)
-    @api.response(409, 'Conflict')
     def put(self, pid):
         """Update a specific park."""
-        attrs = ['p_name', 'p_polygon']
+        attrs = ['p_name', 'p_polygon', 'mid']
         vals = list(map(lambda attr: api.payload[attr], attrs))
-        record = update_single(vals, attrs, pid, 'pid', 'park', db)
-        return record if record else ('Failed to update', 409)
+        try:
+            return update_single(vals, attrs, pid, 'pid', 'park', db)
+        except Exception as e:
+            abort(400, str(e))
