@@ -1,3 +1,4 @@
+from flask import abort
 from flask_restplus import Resource
 
 from server.instance import server, db
@@ -26,13 +27,14 @@ class CivicList(Resource):
 
     @api.expect(civic_loc, validate=True)
     @api.marshal_with(civic_loc)
-    @api.response(409, 'Conflict')
     def post(self):
         """Create a new civic location."""
         attrs = ['civic_address', 'civic_type']
         vals = list(map(lambda attr: api.payload[attr], attrs))
-        record = create_single(vals, attrs, 'civid', 'civic_location', db)
-        return record if record else ('Failed to insert', 409)
+        try:
+            return create_single(vals, attrs, 'civid', 'civic_location', db)
+        except Exception as e:
+            abort(400, str(e))
 
 
 @civic_ns.route('/<int:civid>')
@@ -50,11 +52,12 @@ class CivicLoc(Resource):
 
     @api.expect(civic_loc, validate=True)
     @api.marshal_with(civic_loc)
-    @api.response(409, 'Conflict')
     def put(self, civid):
         """Update a specific civic location."""
         attrs = ['civic_address', 'civic_type']
         vals = list(map(lambda attr: api.payload[attr], attrs))
-        record = update_single(
-            vals, attrs, civid, 'civid', 'civic_location', db)
-        return record if record else ('Failed to update', 409)
+        try:
+            return update_single(
+                vals, attrs, civid, 'civid', 'civic_location', db)
+        except Exception as e:
+            abort(400, str(e))
