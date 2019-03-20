@@ -4,6 +4,7 @@
 TODO list your names
 
 - Elias Al Homsi
+- Camilo Garcia La Rotta
 
 ## Composition
 - backend (python + flask)
