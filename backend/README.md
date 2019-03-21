@@ -17,7 +17,7 @@ Once deployed locally, you can visit the on [http://localhost:8080/api/swagger](
     git clone https://github.com/CamiloGarciaLaRotta/TR-API.git
     cd TR-API
    ```
- - Create a `.env` file in the base directory of the repo with the following:
+ - Create a `.env` file in the base directory of the backend folder with the following:
  
     ```bash
     DB_USERNAME=<your_username>
