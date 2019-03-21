@@ -1,6 +1,7 @@
 from server.instance import server
 
 # Need to import all resources
+from resources.user import *
 from resources.tree import *
 from resources.park import *
 from resources.city import *
