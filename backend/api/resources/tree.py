@@ -3,7 +3,8 @@ from flask_restplus import Resource
 
 from server.instance import server, db
 from models.tree import tree, tree_species
-from .dao import get_all, get_by_id, create_single, update_single, delete_by_id
+from .dao import (get_all, get_by_id, create_single_by_id,
+                  update_by_id, delete_by_attr)
 
 api = server.api
 
@@ -37,7 +38,7 @@ class TreeList(Resource):
             attrs.append('civid')
             vals.append(api.payload['civid'])
         try:
-            return create_single(vals, attrs, 'tid', 'tree', db)
+            return create_single_by_id(vals, attrs, 'tid', 'tree', db)
         except Exception as e:
             abort(400, str(e))
 
@@ -53,7 +54,7 @@ class Tree(Resource):
 
     def delete(self, tid):
         """Delete a specific tree."""
-        delete_by_id(tid, 'tid', 'tree', db)
+        delete_by_attr([tid], ['tid'], 'tree', db)
 
     @api.expect(tree, validate=True)
     @api.marshal_with(tree)
@@ -68,6 +69,6 @@ class Tree(Resource):
             attrs.append('civid')
             vals.append(api.payload['civid'])
         try:
-            return update_single(vals, attrs, tid, 'tid', 'tree', db)
+            return update_by_id(vals, attrs, tid, 'tid', 'tree', db)
         except Exception as e:
             abort(400, str(e))

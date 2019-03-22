@@ -3,7 +3,8 @@ from flask_restplus import Resource
 
 from server.instance import server, db
 from models.civic_location import civic_loc, civic_loc_type
-from .dao import get_all, get_by_id, create_single, update_single, delete_by_id
+from .dao import (get_all, get_by_id, create_single_by_id,
+                  update_by_id, delete_by_attr)
 
 api = server.api
 
@@ -32,7 +33,8 @@ class CivicList(Resource):
         attrs = ['civic_address', 'civic_type']
         vals = list(map(lambda attr: api.payload[attr], attrs))
         try:
-            return create_single(vals, attrs, 'civid', 'civic_location', db)
+            return create_single_by_id(vals, attrs, 'civid',
+                                       'civic_location', db)
         except Exception as e:
             abort(400, str(e))
 
@@ -48,7 +50,7 @@ class CivicLoc(Resource):
 
     def delete(self, civid):
         """Delete a specific civic location."""
-        delete_by_id(civid, 'civid', 'civic_location', db)
+        delete_by_attr([civid], ['civid'], 'civic_location', db)
 
     @api.expect(civic_loc, validate=True)
     @api.marshal_with(civic_loc)
@@ -57,7 +59,7 @@ class CivicLoc(Resource):
         attrs = ['civic_address', 'civic_type']
         vals = list(map(lambda attr: api.payload[attr], attrs))
         try:
-            return update_single(
+            return update_by_id(
                 vals, attrs, civid, 'civid', 'civic_location', db)
         except Exception as e:
             abort(400, str(e))

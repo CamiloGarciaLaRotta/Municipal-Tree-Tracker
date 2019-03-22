@@ -15,6 +15,28 @@ def get_all(table, db):
     return db.query(f'SELECT * FROM {table}').as_dict()
 
 
+def get_by_attr(vs, ks, table, db):
+    """Return all the records matching the key attribute.
+
+    Args:
+        vs ([str]): values of the keys
+        ks ([str]): key attributes to match
+        table (str): name of the table to query
+        db (records.Database): the DB handler
+
+    Returns:
+        dict: entry with the given records, empty dict if none found
+
+    """
+    escaped_vals = ' AND '.join(
+        f"{k} = '{v}'" for k, v in zip(ks, vs))
+    print(escaped_vals)
+    result = db.query(f'SELECT * FROM {table} WHERE {escaped_vals}')
+    records = result.as_dict()
+
+    return records
+
+
 def get_by_id(id, prim_key, table, db):
     """Return all the attributes for the single entry matching the ID.
 
@@ -28,14 +50,35 @@ def get_by_id(id, prim_key, table, db):
         dict: entry with the given ID, empty dict if none found
 
     """
-    result = db.query(f'SELECT * FROM {table} WHERE {prim_key} = {id}')
-    records = result.as_dict()
+    records = get_by_attr([id], [prim_key], table, db)
 
     # we return the first and only item
     return records[0] if len(records) == 1 else {}
 
 
-def create_single(vals, attrs, prim_key, table, db):
+def create_single(vals, attrs, table, db):
+    """Insert a single entry into a given table.
+
+    Args:
+        vals (list(str)): list of values to insert. Same order as attrs
+        attrs (list(str)): list of attributes to be inserted
+        table (str): name of the table to insert to
+        db (records.Database): the DB handler
+
+    Returns:
+        dict: inserted entry, empty dict if failed to create
+
+    """
+    escaped_attrs = ', '.join(attrs)
+    escaped_vals = ', '.join(f"'{val}'" for val in vals)
+    db.query(
+        f'INSERT INTO {table}({escaped_attrs}) \
+        VALUES({escaped_vals})')
+
+    return get_by_attr(vals, attrs, table, db)
+
+
+def create_single_by_id(vals, attrs, prim_key, table, db):
     """Insert a single entry into a given table.
 
     Args:
@@ -63,12 +106,12 @@ def create_single(vals, attrs, prim_key, table, db):
     return get_by_id(id, prim_key, table, db)
 
 
-def delete_by_id(id, prim_key, table, db):
-    """Delete the record with the given primary key from the table.
+def delete_by_attr(vs, ks, table, db):
+    """Delete the record with the given attributes from the table.
 
     Args:
-        id (int): the value of the primary key
-        prim_key (str): the name of the primary key
+        vs list(str): the value of the key
+        ks list(str): the key attribute to delete by
         table (str): the name of the table
         db (records.Database): the DB handler
 
@@ -76,15 +119,52 @@ def delete_by_id(id, prim_key, table, db):
         bool: wether or not the record existed and was deleted
 
     """
+    escaped_cond = ' AND '.join(
+        f"{k} = '{v}'" for k, v in zip(ks, vs))
+    print(escaped_cond)
     try:
-        db.query(f'DELETE FROM {table} WHERE {prim_key} = {id}')
+        db.query(f'DELETE FROM {table} WHERE {escaped_cond}')
     except Exception as ex:
         __handle_exception(ex)
         return False
     return True
 
 
-def update_single(vals, attrs, id, prim_key, table, db):
+def update_by_attr(vs, ks, cond_vs, cond_ks, table, db):
+    """Update a single entry into a given table.
+
+    Args:
+        vs (list(str)): list of values to insert. Same order as attrs
+        ks (list(str)): list of attributes to be inserted
+        cond_vs (list(str)): list of values to identify
+        cond_ks (list(str)): list of attributes to identify
+        table (str): name of the table to insert to
+        db (records.Database): the DB handler
+
+    Returns:
+        dict: inserted entry, empty dict if failed to update
+
+    """
+    # TODO  there is a potential error here when inserting integers
+    #       because we always ' ' the values
+    escaped_vals = ', '.join(
+        f"{k} = '{v}'" for k, v in zip(ks, vs))
+    escaped_cond = ' AND '.join(
+        f"{k} = '{v}'" for k, v in zip(cond_ks, cond_vs))
+    # print(f'UPDATE {table} \
+    #         SET {escaped_vals} WHERE {escaped_cond}')
+    try:
+        db.query(
+            f'UPDATE {table} \
+            SET {escaped_vals} WHERE {escaped_cond}')
+    except Exception as ex:
+        __handle_exception(ex)
+        raise ex
+
+    return get_by_attr(vs, ks, table, db)
+
+
+def update_by_id(vals, attrs, id, prim_key, table, db):
     """Update a single entry into a given table.
 
     Args:

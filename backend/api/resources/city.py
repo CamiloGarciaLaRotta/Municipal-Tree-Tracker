@@ -3,7 +3,7 @@ from flask_restplus import Resource
 
 from server.instance import server, db
 from models.city import city
-from .dao import get_all, get_by_id, create_single, update_single, delete_by_id
+from .dao import (get_all, get_by_id, create_single_by_id, update_by_id)
 
 api = server.api
 
@@ -24,7 +24,7 @@ class CityList(Resource):
         attrs = ['c_name', 'c_polygon']
         vals = list(map(lambda attr: api.payload[attr], attrs))
         try:
-            return create_single(vals, attrs, 'cid', 'city', db)
+            return create_single_by_id(vals, attrs, 'cid', 'city', db)
         except Exception as e:
             abort(400, str(e))
 
@@ -38,9 +38,9 @@ class City(Resource):
         record = get_by_id(cid, 'cid', 'city', db)
         return record if record else ('Not Found', 404)
 
-    def delete(self, cid):
-        """Delete a specific city."""
-        delete_by_id(cid, 'cid', 'city', db)
+    # def delete(self, cid):
+    #     """Delete a specific city."""
+    #     delete_by_attr([cid], ['cid'], 'city', db)
 
     @api.expect(city, validate=True)
     @api.marshal_with(city)
@@ -49,6 +49,6 @@ class City(Resource):
         attrs = ['c_name', 'c_polygon']
         vals = list(map(lambda attr: api.payload[attr], attrs))
         try:
-            return update_single(vals, attrs, cid, 'cid', 'city', db)
+            return update_by_id(vals, attrs, cid, 'cid', 'city', db)
         except Exception as e:
             abort(400, str(e))
