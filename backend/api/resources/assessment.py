@@ -54,7 +54,6 @@ class Assess(Resource):
         parser.add_argument('uid', required=True,
                             help="Env. Scientist ID cannot be blank")
         args = parser.parse_args()
-        print(args['uid'])
 
         ks = ['tid', 'uid']
         vs = [tid, args['uid']]

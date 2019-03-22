@@ -30,7 +30,7 @@ def get_by_attr(vs, ks, table, db):
     """
     escaped_vals = ' AND '.join(
         f"{k} = '{v}'" for k, v in zip(ks, vs))
-    print(escaped_vals)
+
     result = db.query(f'SELECT * FROM {table} WHERE {escaped_vals}')
     records = result.as_dict()
 
@@ -121,7 +121,7 @@ def delete_by_attr(vs, ks, table, db):
     """
     escaped_cond = ' AND '.join(
         f"{k} = '{v}'" for k, v in zip(ks, vs))
-    print(escaped_cond)
+
     try:
         db.query(f'DELETE FROM {table} WHERE {escaped_cond}')
     except Exception as ex:
@@ -151,8 +151,8 @@ def update_by_attr(vs, ks, cond_vs, cond_ks, table, db):
         f"{k} = '{v}'" for k, v in zip(ks, vs))
     escaped_cond = ' AND '.join(
         f"{k} = '{v}'" for k, v in zip(cond_ks, cond_vs))
-    # print(f'UPDATE {table} \
-    #         SET {escaped_vals} WHERE {escaped_cond}')
+    print(f'UPDATE {table} \
+            SET {escaped_vals} WHERE {escaped_cond}')
     try:
         db.query(
             f'UPDATE {table} \
