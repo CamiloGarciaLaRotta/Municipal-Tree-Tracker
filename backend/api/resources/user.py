@@ -63,6 +63,37 @@ class User(Resource):
             abort(400, str(e))
 
 
+@user_ns.route('/reviews/<int:uid>')
+class ReviewList(Resource):
+    def get(self, uid):
+        """Retrieve all tree reviews by an Urban Planner."""
+        try:
+            return get_by_attr([uid], ['uid'], 'review', db)
+        except Exception as e:
+            abort(400, str(e))
+
+    @api.doc(params={'transid': 'Transaction ID'})
+    def post(self, uid):
+        """Create a new review by an Urban Planner."""
+        parser = reqparse.RequestParser()
+        parser.add_argument('transid', required=True,
+                            help="Transaction ID cannot be blank")
+        args = parser.parse_args()
+        try:
+            return create_single([args['transid'], uid],
+                                 ['transid', 'uid'], 'review', db)
+        except Exception as e:
+            abort(400, str(e))
+
+
+@user_ns.route('/reviews/<int:uid>/<int:transid>')
+class Review(Resource):
+
+    def delete(self, uid, transid):
+        """Delete a specific review by an Urban Planner."""
+        delete_by_attr([transid, uid], ['transid', 'uid'], 'review', db)
+
+
 @user_ns.route('/orders/<int:uid>')
 class OrderList(Resource):
     def get(self, uid):
@@ -74,7 +105,7 @@ class OrderList(Resource):
 
     @api.doc(params={'transid': 'Transaction ID'})
     def post(self, uid):
-        """Create a new order for a user."""
+        """Create a new order for a resident."""
         parser = reqparse.RequestParser()
         parser.add_argument('transid', required=True,
                             help="Transaction ID cannot be blank")
@@ -90,16 +121,5 @@ class OrderList(Resource):
 class Orders(Resource):
 
     def delete(self, uid, transid):
-        """Delete a specific user."""
+        """Delete a specific order for a resident."""
         delete_by_attr([transid, uid], ['transid', 'uid'], 'orders', db)
-
-    # @api.expect(user, validate=True)
-    # @api.marshal_with(user)
-    # def put(self, uid):
-    #     """Update a specific user."""
-    #     attrs = ['u_type', 'u_name', 'u_email', 'u_phone', 'civid']
-    #     vals = list(map(lambda attr: api.payload[attr], attrs))
-    #     try:
-    #         return update_by_id(vals, attrs, uid, 'uid', 'users', db)
-    #     except Exception as e:
-    #         abort(400, str(e))
