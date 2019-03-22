@@ -18,7 +18,7 @@ city = server.api.model('City', {
 })
 
 works_for = server.api.model('Works_for', {
-    'start_date': fields.String(
+    'start_date': fields.Date(
         required=True,
         example='2016-01-01',
         description='Date of start of employment'),

@@ -9,13 +9,13 @@ from .dao import (get_all, get_by_attr, create_single,
 api = server.api
 
 assess_ns = api.namespace(
-    'assessment', description='assessment assessment related endpoints')
+    'assessment', description='tree assessment related endpoints')
 
 
 @assess_ns.route('/status')
 class AssessStatus(Resource):
     def get(self):
-        """Retrieve all assessment assessment status."""
+        """Retrieve all assessement status."""
         return {'status': assess_statuses}
 
 

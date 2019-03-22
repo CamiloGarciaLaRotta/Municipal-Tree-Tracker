@@ -8,6 +8,7 @@ from resources.city import *
 from resources.municipality import *
 from resources.civic_location import *
 from resources.assessment import *
+from resources.transaction import *
 
 if __name__ == '__main__':
     server.run()

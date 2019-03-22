@@ -4,7 +4,7 @@ from server.instance import server
 assess_statuses = ['HEALTHY', 'TO_CUT', 'INFESTED', 'DAMAGED']
 
 assessment = server.api.model('Assessment', {
-    'assess_date': fields.String(
+    'assess_date': fields.Date(
         required=True,
         example='2019-05-02',
         description='Date of the assessment yyyy-mm-dd'),
