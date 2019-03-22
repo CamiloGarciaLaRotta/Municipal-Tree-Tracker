@@ -17,6 +17,9 @@
           <li class="nav-item active">
             <a class="nav-link" href="/#/parks">Parks <span class="sr-only">(current)</span></a>
           </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/#/civic">Civic Addresses <span class="sr-only">(current)</span></a>
+          </li>
            <li class="nav-item active">
             <a class="nav-link" href="/#/map">Map <span class="sr-only">(current)</span></a>
           </li>
