@@ -27,10 +27,10 @@ npm run e2e
 npm test
 
 # build with docker for production
-docker build .
+docker build -t tr-web:latest .
 
 # run with docker for production
-docker run -it -p 80:80 <image>
+docker run -it -p 80:80 tr-web:latest
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

@@ -36,57 +36,60 @@
         v-if="m.isClicked"
         :position="m.position">
         <ul id="treeBubbleInfo">
-          <li> id: {{m.treeData.id}} </li>
+          <li> id: {{m.treeData.tid}} </li>
           <li> species: {{m.treeData.species}} </li>
-          <li> Status: {{m.treeData.status}} </li>
-          <li> diameter: {{m.treeData.diameter}} </li>
-          <li> municipality: {{m.treeData.municipality.name}} </li>
-          <li> treeLocation: lng:{{m.treeData.treeLocation.lng}}  lat:{{m.treeData.treeLocation.lat}} </li>
+          <li> planted date: {{m.treeData.planted_date}} </li>
+          <li> municipality: {{m.municipality}} </li>
+          <li> civic_address: {{m.civic_address}} </li>
+          <li> park: {{m.park}} </li>
+          <li> geog_loc: {{m.treeData.geog_loc}}</li>
         </ul>
       <button @click="modalPopUpNewTransaction(m.treeData.id)" v-on:click='m.isClicked = !m.isClicked'> Mark This Tree</button>
-      <button @click="deleteTree(m.treeData.id)" v-on:click='m.isClicked = !m.isClicked'> Delete This Tree</button>
-      <button @click="modalPopUpEditTree(m.treeData.id)" v-on:click='m.isClicked = !m.isClicked'> Edit This Tree</button>
+      <button @click="deleteTree(m.treeData.tid)" v-on:click='m.isClicked = !m.isClicked'> Delete This Tree</button>
+      <button @click="modalPopUpEditTree(m.treeData.tid)" v-on:click='m.isClicked = !m.isClicked'> Edit This Tree</button>
     </gmap-info-window>
   </gmap-marker>
 
   </gmap-map>
 
   <!-- The Modal tree modal-->
-  <div id="myModal" class="modal">
+  <div id="createTreeModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
       <span class="close">&times;</span>
-      <label> Status </label>
-      <select v-model="newTree.status">
-        <option v-for="status in treestatuslist"> {{status}}</option>
-      </select>
-
-      <label> Species </label>
-      <select v-model="newTree.species">
-        <option v-for="species in treespecieslist"> {{species}}</option>
-      </select>
-
-      <label> Diameter </label>
-      <input type=text v-model="newTree.diameter" placeholder="Tree Diameter (cm)">
 
       <label> municipality </label>
-      <select v-model="newTree.municipality">
-        <option v-for="m in municipalities"> {{m.name}}</option>
+      <select v-model="newTree.mid">
+        <option v-bind:key="m.mid" v-for="m in municipalities" v-bind:value="m.mid"> {{m.m_name}}</option>
       </select>
+
+      <label> park </label>
+      <select v-model="newTree.pid">
+        <option v-bind:key="m.pid" v-for="m in parks" v-bind:value="m.pid"> {{m.p_name}}</option>
+      </select>
+
+      <label> civic location </label>
+      <select v-model="newTree.civid">
+        <option v-bind:key="m.civid" v-for="m in civics" v-bind:value="m.civid"> {{m.civic_address}}</option>
+      </select>
+      
+      <label> species </label>
+      <select v-model="newTree.species">
+        <option v-bind:key="m" v-for="m in treespecieslist"> {{m}}</option>
+      </select>
+
+      <label> planted date </label>
+      <input type="date" v-model="newTree.planted_date"/>
       
       <button @click="createTree(newTree)">Create</button>
     </div>
   </div>
 
   <!-- The Modal Transaction modal-->
-  <div id="myModal2" class="modal">
+  <div id="TransactionModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
       <span class="close">&times;</span>
-      <label> New Status </label>
-      <select v-model="newTransaction.status">
-        <option v-for="status in treestatuslist"> {{status}}</option>
-      </select>
       
       <button @click="createTransaction(newTransaction)">Submit</button>
     </div>
@@ -94,7 +97,7 @@
 
 
   <!-- The Modal for bio data-->
-  <div id="myModal3" class="modal">
+  <div id="bioDataModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
       <span class="close">&times;</span>
@@ -103,37 +106,44 @@
       <h3>species </h3>
       <ul id="species">
       </ul>
-      <h3>statuses </h3>
-      <ul id="status">
-      </ul>
-      <h3>diameter</h3>
-      <ul id="diameter">
+      <h3>parks</h3>
+      <ul id="parks">
       </ul>
       <h3>municipalities</h3>
-      <ul id="municipality">
+      <ul id="municipalities">
       </ul>
       <span id="countTrees" > </span>
     </div>
   </div>
 
   <!-- The Modal for edit data-->
-  <div id="myModal4" class="modal">
+  <div id="editTreeModal" class="modal">
     <!-- Modal content -->
-   <div class="modal-content">
+    <div class="modal-content">
       <span class="close">&times;</span>
-     
-      <label> Species </label>
-      <select v-model="newTree.species">
-        <option v-for="species in treespecieslist"> {{species}}</option>
-      </select>
-
-      <label> Diameter </label>
-      <input type=text v-model="newTree.diameter" placeholder="Tree Diameter (cm)">
 
       <label> municipality </label>
-      <select v-model="newTree.municipality">
-        <option v-for="m in municipalities"> {{m.name}}</option>
+      <select v-model="newTree.mid">
+        <option v-bind:key="m.mid" v-for="m in municipalities" v-bind:value="m.mid"> {{m.m_name}}</option>
       </select>
+
+      <label> park </label>
+      <select v-model="newTree.pid">
+        <option v-bind:key="m.pid" v-for="m in parks" v-bind:value="m.pid"> {{m.p_name}}</option>
+      </select>
+
+      <label> civic location </label>
+      <select v-model="newTree.civid">
+        <option v-bind:key="m.civid" v-for="m in civics" v-bind:value="m.civid"> {{m.civic_address}}</option>
+      </select>
+      
+      <label> species </label>
+      <select v-model="newTree.species">
+        <option v-bind:key="m" v-for="m in treespecieslist"> {{m}}</option>
+      </select>
+
+      <label> planted date </label>
+      <input type="date" v-model="newTree.planted_date"/>
       
       <button @click="editTree(newTree)">Edit</button>
     </div>
@@ -148,12 +158,10 @@
 import axios from 'axios'
 var config = require('../../config')
 
-var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
 var backendUrl = 'http://' + config.dev.backendHost + ':' + config.dev.backendPort
 
 var AXIOS = axios.create({
-  baseURL: backendUrl,
-  headers: { 'Access-Control-Allow-Origin': frontendUrl }
+  baseURL: backendUrl
 })
 
 // import google maps
@@ -161,7 +169,7 @@ import * as VueGoogleMaps from 'vue2-google-maps'
 import Vue from 'vue'
 Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyBuXIUEEYNasB92TxFn0lB2eWZtEJzXSs4',
+    key: 'AIzaSyC-C-K0NQ8ihAW0nbkojo6eay2NfISfSTU',
     v: '3'
   }
 })
@@ -177,13 +185,14 @@ export default {
         scaledSize: {width: 23, height: 23, f: 'px', b: 'px'}
       },
       trees: [],
-      newTree: {id: '', species: '', status: '', diameter: '', municipality: '', treeLocation: { lng: '', lat: '' }},
+      newTree: {species: '', planted_date: '', geog_loc: '', mid: '', pid: '', civid: ''},
       errorTree: '',
       response: [],
       center: {lat: 45.5, lng: -73.5},
       positions: [],
-      treestatuslist: [],
       municipalities: [],
+      parks: [],
+      civics: [],
       treespecieslist: [],
       newTransaction: {time: '', date: '', email: '', resident: '', tree: '', status: ''},
       errorTransaction: '',
@@ -192,30 +201,11 @@ export default {
       ],
       edited: null,
       showPolygon: false,
-      deleteTreeID: 0,
       editTreeID: 0
     }
   },
   created: function () {
     this.newTransaction.resident = this.$route.params.resident
-    AXIOS.get('/treestatuslist')
-    .then(response => {
-      // JSON responses are automatically parsed.
-      this.treestatuslist = response.data
-    })
-    .catch(e => {
-      this.errorTree = e
-    })
-
-    AXIOS.get('/treespecieslist')
-    .then(response => {
-      // JSON responses are automatically parsed.
-      this.treespecieslist = response.data
-    })
-    .catch(e => {
-      this.errorTree = e
-    })
-
     this.updateView()
   },
   methods: {
@@ -260,9 +250,8 @@ export default {
       this.showPolygon = false
     },
     modalPopUpNewTree: function (e) {
-      this.newTree.treeLocation.lat = e.latLng.lat()
-      this.newTree.treeLocation.lng = e.latLng.lng()
-      var modal = document.getElementById('myModal')
+      this.newTree.geog_loc = '(' + e.latLng.lat() + ',' + e.latLng.lng() + ')'
+      var modal = document.getElementById('createTreeModal')
       modal.style.display = 'block'
       var span = document.getElementsByClassName('close')[0]
       // When the user clicks on <span> (x), close the modal
@@ -272,7 +261,7 @@ export default {
     },
     modalPopUpNewTransaction: function (e) {
       this.newTransaction.tree = e
-      var modal = document.getElementById('myModal2')
+      var modal = document.getElementById('TransactionModal')
       modal.style.display = 'block'
       var span = document.getElementsByClassName('close')[1]
       // When the user clicks on <span> (x), close the modal
@@ -280,9 +269,9 @@ export default {
         modal.style.display = 'none'
       }
     },
-    modalPopUpEditTree: function (id) {
-      this.editTreeID = id
-      var modal = document.getElementById('myModal4')
+    modalPopUpEditTree: function (tid) {
+      this.editTreeID = tid
+      var modal = document.getElementById('editTreeModal')
       modal.style.display = 'block'
       var span = document.getElementsByClassName('close')[3]
       // When the user clicks on <span> (x), close the modal
@@ -290,28 +279,21 @@ export default {
         modal.style.display = 'none'
       }
     },
-    deleteTree: function (e) {
-      this.deleteTreeID = e
-      AXIOS.post('/trees/delete', {}, {
-        params: {id: this.deleteTreeID}
-      })
+    deleteTree: function (tid) {
+      AXIOS.delete('/trees/' + tid)
       .then(response => {
-        // JSON responses are automatically parsed.
         this.updateView()
         this.errorTree = ''
-        location.reload()
       })
       .catch(e => {
         this.errorTree = e
       })
     },
     createTree: function (newTree) {
-      AXIOS.post('/trees/', {}, {
-        params: {treespecies: newTree.species, treestatus: newTree.status, diameter: newTree.diameter, longitude: newTree.treeLocation.lng, latitude: newTree.treeLocation.lat, municipality: newTree.municipality}
-      })
+      console.log(newTree)
+      AXIOS.post('/trees', newTree)
       .then(response => {
-        // JSON responses are automatically parsed.
-        var modal = document.getElementById('myModal')
+        var modal = document.getElementById('createTreeModal')
         modal.style.display = 'none'
         this.updateView()
         this.errorTree = ''
@@ -334,7 +316,7 @@ export default {
       })
       .then(response => {
         // JSON responses are automatically parsed.
-        var modal = document.getElementById('myModal2')
+        var modal = document.getElementById('TransactionModal')
         modal.style.display = 'none'
         this.errorTransaction = ''
         this.updateView()
@@ -371,11 +353,9 @@ export default {
       return inside
     },
     getMostFrequentData (treesInPolygon) {
-      // do calculation
       var speciesDict = {}
-      var statusDict = {}
       var municipalityDict = {}
-      var diameterDict = {}
+      var parkDict = {}
 
       for (var j = 0; j < treesInPolygon.length; j++) {
         if (speciesDict[treesInPolygon[j].species] !== undefined) {
@@ -384,31 +364,24 @@ export default {
           speciesDict[treesInPolygon[j].species] = 1
         }
 
-        if (statusDict[treesInPolygon[j].status] !== undefined) {
-          statusDict[treesInPolygon[j].status] += 1
+        if (municipalityDict[treesInPolygon[j].municipality] !== undefined) {
+          municipalityDict[treesInPolygon[j].municipality] += 1
         } else {
-          statusDict[treesInPolygon[j].status] = 1
+          municipalityDict[treesInPolygon[j].municipality] = 1
         }
 
-        if (municipalityDict[treesInPolygon[j].municipality.name] !== undefined) {
-          municipalityDict[treesInPolygon[j].municipality.name] += 1
+        if (parkDict[treesInPolygon[j].park] !== undefined) {
+          parkDict[treesInPolygon[j].park] += 1
         } else {
-          municipalityDict[treesInPolygon[j].municipality.name] = 1
-        }
-
-        if (diameterDict[treesInPolygon[j].diameter] !== undefined) {
-          diameterDict[treesInPolygon[j].diameter] += 1
-        } else {
-          diameterDict[treesInPolygon[j].diameter] = 1
+          parkDict[treesInPolygon[j].park] = 1
         }
       }
 
       var speciesSorted = this.sortObjectFrequency(speciesDict)
-      var statusSorted = this.sortObjectFrequency(statusDict)
       var municipalitySorted = this.sortObjectFrequency(municipalityDict)
-      var diameterSorted = this.sortObjectFrequency(diameterDict)
+      var parkSorted = this.sortObjectFrequency(parkDict)
 
-      return {'species': speciesSorted, 'status': statusSorted, 'municipality': municipalitySorted, 'diameter': diameterSorted}
+      return {'species': speciesSorted, 'municipality': municipalitySorted, 'park': parkSorted}
     },
     calculateBioDataPolygon: function () {
       this.showPolygon = false
@@ -417,33 +390,29 @@ export default {
         return
       }
 
-      for (var i = 0; i < this.trees.length; i++) {
-        var e = this.trees[i]
-        if (this.inside(e.treeLocation, this.edited[0])) {
-          treesInPolygon.push(e)
+      for (var i = 0; i < this.positions.length; i++) {
+        var e = this.positions[i]
+        if (this.inside(e.position, this.edited[0])) {
+          treesInPolygon.push({municipality: e.municipality, species: e.treeData.species, park: e.park})
         }
       }
-
       var mostFrequent = this.getMostFrequentData(treesInPolygon)
 
       var speciesSorted = mostFrequent['species']
-      var statusSorted = mostFrequent['status']
       var municipalitySorted = mostFrequent['municipality']
-      var diameterSorted = mostFrequent['diameter']
+      var parkSorted = mostFrequent['park']
 
-      var modal = document.getElementById('myModal3')
+      var modal = document.getElementById('bioDataModal')
 
       // add elements to modal
       var list1 = document.getElementById('species')
-      var list2 = document.getElementById('status')
-      var list3 = document.getElementById('municipality')
-      var list4 = document.getElementById('diameter')
+      var list2 = document.getElementById('municipalities')
+      var list3 = document.getElementById('parks')
 
       // fill
       this.populateList(list1, speciesSorted, treesInPolygon.length)
-      this.populateList(list2, statusSorted, treesInPolygon.length)
-      this.populateList(list3, municipalitySorted, treesInPolygon.length)
-      this.populateList(list4, diameterSorted, treesInPolygon.length)
+      this.populateList(list2, municipalitySorted, treesInPolygon.length)
+      this.populateList(list3, parkSorted, treesInPolygon.length)
       document.getElementById('countTrees').innerHTML = 'trees count: ' + treesInPolygon.length + ' selected from total of ' + this.trees.length
 
       modal.style.display = 'block'
@@ -454,12 +423,10 @@ export default {
       }
     },
     editTree: function (newTree) {
-      AXIOS.post('/trees/edit/', {}, {
-        params: {treespecies: newTree.species, id: this.editTreeID, diameter: newTree.diameter, municipality: newTree.municipality}
-      })
+      AXIOS.put('/trees/' + this.editTreeID, newTree)
       .then(response => {
         // JSON responses are automatically parsed.
-        var modal = document.getElementById('myModal4')
+        var modal = document.getElementById('editTreeModal')
         modal.style.display = 'none'
         this.updateView()
         this.errorTree = ''
@@ -486,35 +453,116 @@ export default {
       })
       return sortable
     },
-    hash: function (obj) {
-      // some unique object-dependent key
-      return obj.totallyUniqueEmployeeIdKey // just an example
+    getMunicipalityById: function (mid, entry) {
+      if (mid === 'null') {
+        entry.municipality = 'null'
+        return
+      }
+      AXIOS.get('/municipalities/' + mid)
+      .then(response => {
+        entry.municipality = response.data.m_name
+      })
+      .catch(e => {
+      })
+    },
+    getCitybyId: function (cid, entry) {
+      if (cid === 'null') {
+        entry.city = 'null'
+        return
+      }
+      AXIOS.get('/cities/' + cid)
+      .then(response => {
+        entry.city = response.data.c_name
+      })
+      .catch(e => {
+      })
+    },
+    getParkById: function (pid, entry) {
+      if (pid === 'null') {
+        entry.park = 'null'
+        return
+      }
+      AXIOS.get('/parks/' + pid)
+      .then(response => {
+        entry.park = response.data.p_name
+      })
+      .catch(e => {
+      })
+    },
+    getCivicById: function (civid, entry) {
+      if (civid === 'null') {
+        entry.civic_address = 'null'
+        return
+      }
+      AXIOS.get('/civic_loc/' + civid)
+      .then(response => {
+        entry.civic_address = response.data.civic_address
+      })
+      .catch(e => {
+      })
     },
     updateView: function () {
       this.errorTree = ''
       this.errorTransaction = ''
       AXIOS.get('/municipalities')
       .then(response => {
-        // JSON responses are automatically parsed.
         this.municipalities = response.data
       })
       .catch(e => {
         this.errorTree = e
       })
 
-      //  Initializing trees from backend
-      AXIOS.get(`/trees`)
+      AXIOS.get('/parks')
       .then(response => {
-        // JSON responses are automatically parsed.
-        var selectedTree = parseInt(this.$route.params.id) - 1
+        this.parks = response.data
+      })
+      .catch(e => {
+        this.errorTree = e
+      })
+
+      AXIOS.get('/civic_loc')
+      .then(response => {
+        this.civics = response.data
+      })
+      .catch(e => {
+        this.errorTree = e
+      })
+
+      AXIOS.get('/trees/species')
+      .then(response => {
+        this.treespecieslist = response.data.species
+      })
+      .catch(e => {
+        this.errorTree = e
+      })
+
+      AXIOS.get('/trees')
+      .then(response => {
+        this.positions = []
         this.trees = response.data
         for (var i = 0; i < this.trees.length; i++) {
-          if (i === selectedTree) {
-            this.positions.push({ position: {lat: parseFloat(this.trees[i].treeLocation.lat), lng: parseFloat(this.trees[i].treeLocation.lng)}, icon: {url: 'http://maps.google.com/mapfiles/kml/shapes/star.png', size: {width: 46, height: 46, f: 'px', b: 'px'}, scaledSize: {width: 46, height: 46, f: 'px', b: 'px'}}, treeData: this.trees[i], isClicked: true })
-            this.center = {lat: parseFloat(this.trees[i].treeLocation.lat), lng: parseFloat(this.trees[i].treeLocation.lng)}
-          } else {
-            this.positions.push({ position: {lat: parseFloat(this.trees[i].treeLocation.lat), lng: parseFloat(this.trees[i].treeLocation.lng)}, icon: {url: 'http://maps.google.com/mapfiles/kml/shapes/parks.png', size: {width: 46, height: 46, f: 'px', b: 'px'}, scaledSize: {width: 23, height: 23, f: 'px', b: 'px'}}, treeData: this.trees[i], isClicked: false })
+          var parsedLat = this.trees[i].geog_loc.split(',')[0].substring(1)
+          var parsedLng = this.trees[i].geog_loc.split(',')[1]
+          parsedLng = parsedLng.substring(0, parsedLng.length - 1)
+          var parsedLocaiton = {
+            lat: parseFloat(parsedLat),
+            lng: parseFloat(parsedLng)
           }
+          var posEntry =
+            {
+              position: parsedLocaiton,
+              icon: {
+                url: 'http://maps.google.com/mapfiles/kml/shapes/parks.png',
+                size: {width: 46, height: 46, f: 'px', b: 'px'},
+                scaledSize: {width: 23, height: 23, f: 'px', b: 'px'}
+              },
+              treeData: this.trees[i],
+              isClicked: false
+            }
+          this.getMunicipalityById(this.trees[i].mid, posEntry)
+          this.getParkById(this.trees[i].pid, posEntry)
+          this.getCivicById(this.trees[i].civid, posEntry)
+          this.positions.push(posEntry)
         }
       })
     .catch(e => {
@@ -607,7 +655,7 @@ select, input {
 button{
     background-color: #060E3D;
     color: white;
-    padding: 14px 20px;
+    padding: 8px 20px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
@@ -624,7 +672,7 @@ button:disabled {
   background-color:gray;
 }
 
-#myModal3 ul {
+#bioDataModal ul {
   list-style-type: none;
   text-align: center;
   margin-left:-3em;

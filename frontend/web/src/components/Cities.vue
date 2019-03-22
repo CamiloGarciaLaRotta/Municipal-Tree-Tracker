@@ -1,23 +1,23 @@
 <template>
-	<div id="municipalities">
-    <h1> Municipalities </h1>
+	<div id="cities">
+    <h1> Cities </h1>
     
-    <div id="newmunicipality">
-      name:  <input placeholder="Municipality Name" v-model="newMunicipality" type=text>
-      <button @click="createMunicipality(newMunicipality)">Create</button>
+    <div id="newcity">
+      name:  <input placeholder="City Name" v-model="newCity" type=text>
+      <button @click="createCity(newCity)">Create</button>
     </div>
 
     <div id="listing">
-      <h3> listing all municipalities: </h3>
+      <h3> listing all cities: </h3>
       <ol>
-        <li v-bind:key="m.mid" v-for="m in municipalities" style="width=100%">
+        <li v-bind:key="m.cid" v-for="m in cities" style="width=100%">
           <div>
-            <span> {{m.m_name.replace(new RegExp('-| ', 'g'), '_')}} <strong v-on:click="deleteMuniciplaity(m.mid)" style="color:red"> X </strong> </span>
+            <span> {{m.c_name.replace(new RegExp('-| ', 'g'), '_')}} <strong v-on:click="deleteCity(m.cid)" style="color:red"> X </strong> </span>
           </div>
         </li>
       </ol>
     </div>
-    <div class="alert alert-secondary" role="alert" v-if="errorMunicipality" style="color:red">Error: {{errorMunicipality.response.data.message}}  </div>
+    <div class="alert alert-secondary" role="alert" v-if="errorCity" style="color:red">Error: {{errorCity.response.data.message}}  </div>
   </div>
 </template>
 
@@ -36,12 +36,12 @@ var AXIOS = axios.create({
 
 //  export module
 export default {
-  name: 'municipalities',
+  name: 'cities',
   data () {
     return {
-      municipalities: [],
-      newMunicipality: '',
-      errorMunicipality: '',
+      cities: [],
+      newCity: '',
+      errorCity: '',
       response: [],
       trees: [],
       errorTree: ''
@@ -51,37 +51,35 @@ export default {
     this.updateView()
   },
   methods: {
-    createMunicipality: function (newMunicipality) {
+    createCity: function (newCity) {
       var params = {
-        m_name: newMunicipality,
-        cid: '99',
-        m_population: 22348,
-        m_polygon: '((1.0,0.0),(0.0,0.0),(2.0,3.0))'
+        c_name: newCity,
+        c_polygon: '((1.0,0.0),(0.0,0.0),(2.0,3.0))'
       }
-      AXIOS.post('/municipalities', params)
+      AXIOS.post('/cities', params)
       .then(response => {
         // JSON responses are automatically parsed.
         this.updateView()
       })
       .catch(e => {
-        this.errorMunicipality = e
+        this.errorCity = e
       })
     },
-    deleteMuniciplaity: function (mid) {
-      AXIOS.delete('/municipalities/' + mid)
+    deleteCity: function (cid) {
+      AXIOS.delete('/cities/' + cid)
       .then(response => {
         this.updateView()
       })
       .catch(e => {
-        this.errorMunicipality = e
+        this.errorCity = e
       })
     },
     updateView: function () {
       this.errorTree = ''
       this.errorTransaction = ''
-      AXIOS.get('/municipalities')
+      AXIOS.get('/cities')
       .then(response => {
-        this.municipalities = response.data
+        this.cities = response.data
       })
       .catch(e => {
         this.errorTree = e
@@ -93,7 +91,7 @@ export default {
 
 <style scoped>
 
-#newmunicipality, #listing {
+#newcity, #listing {
   margin-top: 4em;
   margin-left:3em;
   float:left;

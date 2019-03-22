@@ -1,23 +1,23 @@
 <template>
-	<div id="municipalities">
-    <h1> Municipalities </h1>
+	<div id="parks">
+    <h1> Parks </h1>
     
-    <div id="newmunicipality">
-      name:  <input placeholder="Municipality Name" v-model="newMunicipality" type=text>
-      <button @click="createMunicipality(newMunicipality)">Create</button>
+    <div id="newpark">
+      name:  <input placeholder="Park Name" v-model="newPark" type=text>
+      <button @click="createPark(newPark)">Create</button>
     </div>
 
     <div id="listing">
-      <h3> listing all municipalities: </h3>
+      <h3> listing all parks: </h3>
       <ol>
-        <li v-bind:key="m.mid" v-for="m in municipalities" style="width=100%">
+        <li v-bind:key="m.pid" v-for="m in parks" style="width=100%">
           <div>
-            <span> {{m.m_name.replace(new RegExp('-| ', 'g'), '_')}} <strong v-on:click="deleteMuniciplaity(m.mid)" style="color:red"> X </strong> </span>
+            <span> {{m.p_name.replace(new RegExp('-| ', 'g'), '_')}} <strong v-on:click="deletePark(m.pid)" style="color:red"> X </strong> </span>
           </div>
         </li>
       </ol>
     </div>
-    <div class="alert alert-secondary" role="alert" v-if="errorMunicipality" style="color:red">Error: {{errorMunicipality.response.data.message}}  </div>
+    <div class="alert alert-secondary" role="alert" v-if="errorPark" style="color:red">Error: {{errorPark.response.data.message}}  </div>
   </div>
 </template>
 
@@ -36,12 +36,12 @@ var AXIOS = axios.create({
 
 //  export module
 export default {
-  name: 'municipalities',
+  name: 'parks',
   data () {
     return {
-      municipalities: [],
-      newMunicipality: '',
-      errorMunicipality: '',
+      parks: [],
+      newPark: '',
+      errorPark: '',
       response: [],
       trees: [],
       errorTree: ''
@@ -51,37 +51,35 @@ export default {
     this.updateView()
   },
   methods: {
-    createMunicipality: function (newMunicipality) {
+    createPark: function (newPark) {
       var params = {
-        m_name: newMunicipality,
-        cid: '99',
-        m_population: 22348,
-        m_polygon: '((1.0,0.0),(0.0,0.0),(2.0,3.0))'
+        p_name: newPark,
+        p_polygon: '((1.0,0.0),(0.0,0.0),(2.0,3.0))',
+        mid: '169'
       }
-      AXIOS.post('/municipalities', params)
+      AXIOS.post('/parks', params)
       .then(response => {
-        // JSON responses are automatically parsed.
         this.updateView()
       })
       .catch(e => {
-        this.errorMunicipality = e
+        this.errorPark = e
       })
     },
-    deleteMuniciplaity: function (mid) {
-      AXIOS.delete('/municipalities/' + mid)
+    deletePark: function (pid) {
+      AXIOS.delete('/parks/' + pid)
       .then(response => {
         this.updateView()
       })
       .catch(e => {
-        this.errorMunicipality = e
+        this.errorPark = e
       })
     },
     updateView: function () {
       this.errorTree = ''
       this.errorTransaction = ''
-      AXIOS.get('/municipalities')
+      AXIOS.get('/parks')
       .then(response => {
-        this.municipalities = response.data
+        this.parks = response.data
       })
       .catch(e => {
         this.errorTree = e
@@ -93,7 +91,7 @@ export default {
 
 <style scoped>
 
-#newmunicipality, #listing {
+#newpark, #listing {
   margin-top: 4em;
   margin-left:3em;
   float:left;
@@ -144,7 +142,7 @@ button:hover{
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opapark */
 }
 
 /* Modal Content */
