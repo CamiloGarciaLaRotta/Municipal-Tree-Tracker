@@ -1,9 +1,11 @@
 from flask import abort
-from flask_restplus import Resource
+from flask_restplus import Resource, reqparse
 
 from server.instance import server, db
 from models.user import user, user_types
-from .dao import get_all, get_by_id, create_single_by_id, update_by_id
+from .dao import (get_all, get_by_id, get_by_attr,
+                  create_single_by_id, create_single, update_by_id,
+                  delete_by_attr)
 
 api = server.api
 
@@ -59,3 +61,45 @@ class User(Resource):
             return update_by_id(vals, attrs, uid, 'uid', 'users', db)
         except Exception as e:
             abort(400, str(e))
+
+
+@user_ns.route('/orders/<int:uid>')
+class OrderList(Resource):
+    def get(self, uid):
+        """Retrieve all tree orders of a resident."""
+        try:
+            return get_by_attr([uid], ['uid'], 'orders', db)
+        except Exception as e:
+            abort(400, str(e))
+
+    @api.doc(params={'transid': 'Transaction ID'})
+    def post(self, uid):
+        """Create a new order for a user."""
+        parser = reqparse.RequestParser()
+        parser.add_argument('transid', required=True,
+                            help="Transaction ID cannot be blank")
+        args = parser.parse_args()
+        try:
+            return create_single([args['transid'], uid],
+                                 ['transid', 'uid'], 'orders', db)
+        except Exception as e:
+            abort(400, str(e))
+
+
+@user_ns.route('/orders/<int:uid>/<int:transid>')
+class Orders(Resource):
+
+    def delete(self, uid, transid):
+        """Delete a specific user."""
+        delete_by_attr([transid, uid], ['transid', 'uid'], 'orders', db)
+
+    # @api.expect(user, validate=True)
+    # @api.marshal_with(user)
+    # def put(self, uid):
+    #     """Update a specific user."""
+    #     attrs = ['u_type', 'u_name', 'u_email', 'u_phone', 'civid']
+    #     vals = list(map(lambda attr: api.payload[attr], attrs))
+    #     try:
+    #         return update_by_id(vals, attrs, uid, 'uid', 'users', db)
+    #     except Exception as e:
+    #         abort(400, str(e))
