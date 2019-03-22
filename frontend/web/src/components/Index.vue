@@ -10,7 +10,6 @@
         <div class="alert alert-primary" role="alert" v-if="errorLogin" style="color:red">Error: {{errorLogin.response.data.message}}  </div>
         <div class="alert alert-success" role="alert" v-if="loggedin" style="color:red"> 
           Welcome: {{loggedin.email}} Proceed to <router-link :to="{ name: 'TreeMapResident', params: { resident: loggedin.email }}">Map</router-link>  </div>
-       
         <br>
         <button class="mainButton" onclick="document.getElementById('id01').style.display='block'" style="padding:1.3em; width:auto; margin:1em;">Register</button>
 
@@ -28,10 +27,6 @@
               <label><i>email</i></label>
               <br>
               <input type="email" placeholder="email" name="email" v-model="newResident.email" required>
-              <br>
-              <label><i>Password</i></label>
-              <br>
-              <input type="password" placeholder="********" name="password" v-model="newResident.password" required>
               <br>
               
               <label><i> Type </i></label>

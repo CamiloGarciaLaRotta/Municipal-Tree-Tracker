@@ -11,19 +11,21 @@
           <li class="nav-item active">
             <a class="nav-link" href="/#/municipalities">Municipalities <span class="sr-only">(current)</span></a>
           </li>
-         
+          <li class="nav-item active">
+            <a class="nav-link" href="/#/cities">Cities <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/#/parks">Parks <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/#/civic">Civic Addresses <span class="sr-only">(current)</span></a>
+          </li>
            <li class="nav-item active">
             <a class="nav-link" href="/#/map">Map <span class="sr-only">(current)</span></a>
           </li>
-
-           <li class="nav-item active">
-            <a class="nav-link" href="/#/trees">Trees <span class="sr-only">(current)</span></a>
-          </li>
-
           <li class="nav-item active">
             <a class="nav-link" href="/#/residents"> Residents <span class="sr-only">(current)</span></a>
           </li>
-
            <li class="nav-item active">
             <a class="nav-link" href="/#/transactions"> Transactions <span class="sr-only">(current)</span></a>
           </li>

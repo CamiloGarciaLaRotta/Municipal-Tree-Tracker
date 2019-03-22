@@ -31,7 +31,7 @@ module.exports = {
     host:  'localhost',
     backendHost: 'localhost',
     backendPort: 8080,
-    autoOpenBrowser: true,
+    autoOpenBrowser: false,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {},

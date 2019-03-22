@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restplus import Api
 from environment.instance import environment_config
+from flask_cors import CORS
 
 import records
 
@@ -8,6 +9,7 @@ import records
 class Server(object):
     def __init__(self):
         self.app = Flask(__name__)
+        CORS(self.app)
         self.api = Api(self.app,
                        version='0.1',
                        title='Tree Tracker API',
