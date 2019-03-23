@@ -63,11 +63,6 @@
               <br>
               <input type="email" placeholder="Email" v-model="newLogin.email" required>
               <br>
-              <label><i>Password</i></label>
-              <br>
-              <input type="password" placeholder="********"   v-model="newLogin.password" required>
-              <br>
-              <br>
               <button onclick="document.getElementById('id02').style.display='none'" @click="login(newLogin)">Login</button>
             </div>
             <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">
@@ -125,7 +120,7 @@ export default {
   },
   methods: {
     createResident: function (newResident) {
-      AXIOS.post('/residents/', {}, {
+      AXIOS.post('/user/', {}, {
         params: {name: newResident.name, password: newResident.password, email: newResident.email, longitude: 22, latitude: 22, type: newResident.type}
       })
       .then(response => {
@@ -141,9 +136,7 @@ export default {
       console.log('updateview')
     },
     login: function (newLogin) {
-      AXIOS.post('/login/', {}, {
-        params: {email: newLogin.email, password: newLogin.password}
-      })
+      AXIOS.get('/users/login/' + newLogin.email)
       .then(response => {
         // JSON responses are automatically parsed.
         this.loggedin = response.data
