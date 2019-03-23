@@ -19,6 +19,18 @@ class UserTypes(Resource):
         return {'types': user_types}
 
 
+@user_ns.route('/login/<string:u_email>')
+class Login(Resource):
+    def get(self, u_email):
+        """Login a resident."""
+        try:
+            records = get_by_attr([u_email, 'RESIDENT'], [
+                'u_email', 'u_type'], 'users', db)
+            return {'login': len(records) == 1}
+        except Exception as e:
+            abort(400, str(e))
+
+
 @user_ns.route('')
 class UserList(Resource):
     @api.marshal_list_with(user)
