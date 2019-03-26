@@ -6,7 +6,7 @@
 *.pyo
 env/
 dist/
-build/
+backend/build/
 *.egg
 *.egg-info/
 _mailinglist
