@@ -13,6 +13,8 @@ TODO list your names
 ## Run
 - check instructions inside each of the backend/frontend to run it
 
+## For mapreduce
+- ssh to the group machine
 
 ## Quick Demo a video under this link
 [here](https://drive.google.com/file/d/1hUp2jZLXUktyHY3DM7agKPcfEWCkuEUK/view?usp=sharing)
